@@ -4244,62 +4244,63 @@ function handleFile(f) {
 
 const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbxJ6mVHowI_7gBlhWZ3lCZ-9con1RgmWVeCspl9aFdJuYD31uTyXSqlNjf3xOXvAzHTAw/exec';
 
-function fetchLiveData() {
-  const badge = document.getElementById('live-fetch-badge');
-  if (badge) { badge.textContent = '🔄 Memuat data...'; badge.style.color = 'var(--Y)'; }
-
-  // Bersihkan callback JSONP lama jika ada
-  const oldScript = document.getElementById('jsonp-loader');
-  if (oldScript) oldScript.remove();
-  if (window.__ultgCallback) delete window.__ultgCallback;
-
-  // Nama callback unik
-  const cbName = '__ultgCallback';
-
-  // Set timeout — jika 10 detik tidak ada respons, anggap gagal
-  const timer = setTimeout(() => {
-    const s = document.getElementById('jsonp-loader');
-    if (s) s.remove();
-    const bt = document.getElementById('live-fetch-badge');
-    if (bt) { bt.textContent = '⚠ Timeout · data statis'; bt.style.color = '#FF8F00'; }
-    console.warn('[ULTG Live] Timeout setelah 10 detik');
-  }, 20000);
-
-  // Fungsi yang dipanggil Apps Script saat data siap
-  window[cbName] = function(data) {
-    clearTimeout(timer);
-    const s = document.getElementById('jsonp-loader');
-    if (s) s.remove();
-    delete window[cbName];
-
-    if (data.error) {
-      console.warn('[ULTG Live] Error dari server:', data.error);
-      const be = document.getElementById('live-fetch-badge');
-      if (be) { be.textContent = '⚠ Error · data statis'; be.style.color = '#FF8F00'; }
-      return;
-    }
-
-    applyLiveData(data);
+async function fetchLiveData() {
+  const setBadge = (txt, color) => {
     const b = document.getElementById('live-fetch-badge');
-    if (b) {
-      b.innerHTML = '✅ Live · ' + (data.updated || '');
-      b.style.color = '#00C07B';
-    }
-    console.log('[ULTG Live] Data berhasil diload via JSONP:', data);
+    if (b) { b.innerHTML = txt; b.style.color = color; }
   };
 
-  // Inject script tag JSONP ke body (lebih reliable untuk redirect)
-  const script = document.createElement('script');
-  script.id    = 'jsonp-loader';
-  script.async = true;
-  script.src   = SHEETS_API_URL + '?callback=' + cbName + '&t=' + Date.now();
-  script.onerror = function() {
-    clearTimeout(timer);
-    delete window[cbName];
-    if (badge) { badge.textContent = '⚠ Gagal · data statis'; badge.style.color = 'var(--O)'; }
-    console.warn('[ULTG Live] Script load error');
-  };
-  document.body.appendChild(script);
+  setBadge('🔄 Memuat data...', '#FFC107');
+
+  // Coba fetch() biasa dulu (lebih reliable dari JSONP)
+  try {
+    const res = await fetch(SHEETS_API_URL + '?t=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    applyLiveData(data);
+    setBadge('✅ Live · ' + (data.updated || ''), '#00C07B');
+    console.log('[ULTG Live] OK via fetch():', data.updated);
+    return;
+  } catch(e1) {
+    console.warn('[ULTG Live] fetch() gagal, coba JSONP:', e1.message);
+  }
+
+  // Fallback: JSONP
+  try {
+    await new Promise((resolve, reject) => {
+      const cbName = '__ultgCb_' + Date.now();
+      const timer  = setTimeout(() => {
+        cleanup(); reject(new Error('timeout'));
+      }, 15000);
+
+      function cleanup() {
+        const s = document.getElementById('jsonp-loader');
+        if (s) s.remove();
+        delete window[cbName];
+        clearTimeout(timer);
+      }
+
+      window[cbName] = (data) => {
+        cleanup();
+        if (data.error) { reject(new Error(data.error)); return; }
+        applyLiveData(data);
+        setBadge('✅ Live · ' + (data.updated || ''), '#00C07B');
+        console.log('[ULTG Live] OK via JSONP:', data.updated);
+        resolve();
+      };
+
+      const s = document.createElement('script');
+      s.id      = 'jsonp-loader';
+      s.async   = true;
+      s.src     = SHEETS_API_URL + '?callback=' + cbName + '&t=' + Date.now();
+      s.onerror = () => { cleanup(); reject(new Error('script error')); };
+      document.body.appendChild(s);
+    });
+  } catch(e2) {
+    console.warn('[ULTG Live] JSONP gagal:', e2.message);
+    setBadge('⚠ Gagal · data statis', '#FF8F00');
+  }
 }
 
 function applyLiveData(data) {
