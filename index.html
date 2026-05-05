@@ -4260,7 +4260,8 @@ function fetchLiveData() {
   const timer = setTimeout(() => {
     const s = document.getElementById('jsonp-loader');
     if (s) s.remove();
-    if (badge) { badge.textContent = '⚠ Timeout · data statis'; badge.style.color = 'var(--O)'; }
+    const bt = document.getElementById('live-fetch-badge');
+    if (bt) { bt.textContent = '⚠ Timeout · data statis'; bt.style.color = '#FF8F00'; }
     console.warn('[ULTG Live] Timeout setelah 10 detik');
   }, 20000);
 
@@ -4273,12 +4274,17 @@ function fetchLiveData() {
 
     if (data.error) {
       console.warn('[ULTG Live] Error dari server:', data.error);
-      if (badge) { badge.textContent = '⚠ Error · data statis'; badge.style.color = 'var(--O)'; }
+      const be = document.getElementById('live-fetch-badge');
+      if (be) { be.textContent = '⚠ Error · data statis'; be.style.color = '#FF8F00'; }
       return;
     }
 
     applyLiveData(data);
-    if (badge) { badge.textContent = '✅ Live · ' + (data.updated || ''); badge.style.color = 'var(--G)'; }
+    const b = document.getElementById('live-fetch-badge');
+    if (b) {
+      b.innerHTML = '✅ Live · ' + (data.updated || '');
+      b.style.color = '#00C07B';
+    }
     console.log('[ULTG Live] Data berhasil diload via JSONP:', data);
   };
 
@@ -4383,17 +4389,14 @@ function setKartuPct(subKeyword, val, newSub) {
 
 // ── Jalankan fetch saat halaman siap ──
 window.addEventListener('load', () => {
-  // Tambah badge status di header
-  const hdr = document.querySelector('.live-badge') || document.querySelector('[class*="badge"]');
-  const badge = document.createElement('span');
-  badge.id = 'live-fetch-badge';
-  badge.style.cssText = 'font-size:11px;padding:2px 8px;border-radius:99px;background:rgba(0,113,197,.12);color:var(--A);margin-left:8px;font-family:JetBrains Mono,monospace;';
-  badge.textContent = '🔄 Memuat...';
-  const nav = document.querySelector('.tabs-bar');
-  if (nav) nav.insertAdjacentElement('beforebegin', badge);
-
-  // Fetch setelah chart statis selesai render (delay kecil)
-  setTimeout(fetchLiveData, 800);
+  // Update hd-ts sebagai status indicator
+  const hdTs = document.getElementById('hd-ts');
+  if (hdTs) {
+    hdTs.innerHTML = '🔄 Memuat data live...';
+    hdTs.id = 'live-fetch-badge'; // reuse elemen yang sudah ada
+  }
+  // Fetch setelah render selesai
+  setTimeout(fetchLiveData, 1200);
 });
 </script>
 
