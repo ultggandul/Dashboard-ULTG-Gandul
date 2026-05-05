@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <!-- saved from url=(0068)file:///Users/mac/Documents/Dashboard%20Progres%20ULTG%20Gandul.html -->
 <html lang="id"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -4245,24 +4244,55 @@ function handleFile(f) {
 
 const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbzTqbIDSpbOE0HDCHyiIdqiYqnKui49XzX3zwrty-r022lT7_Ok-ySmzf47oYquPNoU/exec';
 
-async function fetchLiveData() {
+function fetchLiveData() {
   const badge = document.getElementById('live-fetch-badge');
   if (badge) { badge.textContent = '🔄 Memuat data...'; badge.style.color = 'var(--Y)'; }
 
-  try {
-    const res  = await fetch(SHEETS_API_URL);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
+  // Bersihkan callback JSONP lama jika ada
+  const oldScript = document.getElementById('jsonp-loader');
+  if (oldScript) oldScript.remove();
+  if (window.__ultgCallback) delete window.__ultgCallback;
+
+  // Nama callback unik
+  const cbName = '__ultgCallback';
+
+  // Set timeout — jika 10 detik tidak ada respons, anggap gagal
+  const timer = setTimeout(() => {
+    const s = document.getElementById('jsonp-loader');
+    if (s) s.remove();
+    if (badge) { badge.textContent = '⚠ Timeout · data statis'; badge.style.color = 'var(--O)'; }
+    console.warn('[ULTG Live] Timeout setelah 10 detik');
+  }, 10000);
+
+  // Fungsi yang dipanggil Apps Script saat data siap
+  window[cbName] = function(data) {
+    clearTimeout(timer);
+    const s = document.getElementById('jsonp-loader');
+    if (s) s.remove();
+    delete window[cbName];
+
+    if (data.error) {
+      console.warn('[ULTG Live] Error dari server:', data.error);
+      if (badge) { badge.textContent = '⚠ Error · data statis'; badge.style.color = 'var(--O)'; }
+      return;
+    }
 
     applyLiveData(data);
-
     if (badge) { badge.textContent = '✅ Live · ' + (data.updated || ''); badge.style.color = 'var(--G)'; }
-    console.log('[ULTG Live] Data berhasil diload:', data);
-  } catch (err) {
-    console.warn('[ULTG Live] Gagal fetch, tampilkan data statis:', err.message);
-    if (badge) { badge.textContent = '⚠ Offline · data statis'; badge.style.color = 'var(--O)'; }
-  }
+    console.log('[ULTG Live] Data berhasil diload via JSONP:', data);
+  };
+
+  // Inject script tag JSONP
+  const script = document.createElement('script');
+  script.id  = 'jsonp-loader';
+  script.src = SHEETS_API_URL + '?callback=' + cbName + '&t=' + Date.now();
+  script.onerror = function() {
+    clearTimeout(timer);
+    delete window[cbName];
+    if (badge) { badge.textContent = '⚠ Gagal · data statis'; badge.style.color = 'var(--O)'; }
+    console.warn('[ULTG Live] Script load error');
+  };
+  document.head.appendChild(script);
 }
 
 function applyLiveData(data) {
