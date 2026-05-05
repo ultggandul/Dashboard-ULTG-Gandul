@@ -3934,6 +3934,7 @@ window.addEventListener('load', () => {
 function handleDrop(e) { e.preventDefault(); const f=e.dataTransfer.files[0]; if(f) handleFile(f); }
 
 // ── MASTER REFRESH: re-render SEMUA chart & tabel ──────────────
+if (typeof curPeriod === 'undefined') var curPeriod = 'month';
 function refreshAll() {
   drawDonut();
   buildLokasiBars();
@@ -4357,8 +4358,11 @@ function applyLiveData(data) {
   // (otomatis ter-render ulang lewat refreshAll di bawah)
 
   // ── Re-render semua chart & tabel ──
-  if (typeof refreshAll === 'function') refreshAll();
-  if (typeof drawDonut  === 'function') drawDonut();
+  const fns = [drawDonut, buildLokasiBars, drawStackBar, buildKatProgress,
+               buildResumeTable, buildDetailTable, buildAnomGiBars,
+               buildAnomBidangBars, buildAnomGiTable, buildAlatTable,
+               drawYearlyChart, drawMonthlyAnomChart, drawCumulAnomChart];
+  fns.forEach(fn => { try { if (typeof fn === 'function') fn(); } catch(e) {} });
 
   // ── Update timestamp last-update ──
   const tsEls = [document.getElementById('last-update'), document.getElementById('hd-ts'), document.getElementById('ft-ts')];
