@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!-- saved from url=(0068)file:///Users/mac/Documents/Dashboard%20Progres%20ULTG%20Gandul.html -->
 <html lang="id"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -4238,6 +4239,131 @@ function handleFile(f) {
   };
   reader.readAsBinaryString(f);
 }
+
+// ─── LIVE DATA FROM GOOGLE SHEETS ────────────────────────────
+// Fetch otomatis saat halaman dibuka — data selalu terbaru dari Sheets
+
+const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbzTqbIDSpbOE0HDCHyiIdqiYqnKui49XzX3zwrty-r022lT7_Ok-ySmzf47oYquPNoU/exec';
+
+async function fetchLiveData() {
+  const badge = document.getElementById('live-fetch-badge');
+  if (badge) { badge.textContent = '🔄 Memuat data...'; badge.style.color = 'var(--Y)'; }
+
+  try {
+    const res  = await fetch(SHEETS_API_URL);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    applyLiveData(data);
+
+    if (badge) { badge.textContent = '✅ Live · ' + (data.updated || ''); badge.style.color = 'var(--G)'; }
+    console.log('[ULTG Live] Data berhasil diload:', data);
+  } catch (err) {
+    console.warn('[ULTG Live] Gagal fetch, tampilkan data statis:', err.message);
+    if (badge) { badge.textContent = '⚠ Offline · data statis'; badge.style.color = 'var(--O)'; }
+  }
+}
+
+function applyLiveData(data) {
+  const rot  = data.rot;
+  const anom = data.anom;
+  if (!rot || !anom) return;
+
+  // ── Update variabel global JS ──
+  const aktif = rot.aktif || (rot.total - rot.efi);
+
+  // Update LOKASI_DATA
+  if (rot.lokasi && rot.lokasi.length) {
+    LOKASI_DATA.length = 0;
+    rot.lokasi.forEach(l => LOKASI_DATA.push(l));
+  }
+
+  // ── Update kartu stats ROT (Part 1) ──
+  setKartu('sudah terlaksana', rot.acc);
+  setKartu('belum terjadwal',  rot.idle);
+  setKartu('bay bermasalah',   rot.anom);
+
+  // ── Update kartu stats ROT (Part 2 — dengan %) ──
+  setKartuPct('selesai',      rot.acc,  rot.pctAcc  + '% selesai');
+  setKartuPct('belum jalan',  rot.idle, rot.pctIdle + '% belum jalan');
+  setKartuPct('diulang',      rot.res,  rot.pctRes  + '% diulang');
+
+  // ── Update badge & progress bar ──
+  const badge = document.getElementById('rot-pct-badge');
+  if (badge) badge.textContent = rot.pctAcc + '% Accomplished';
+
+  // Progress bar Accomplished
+  document.querySelectorAll('[style*="linear-gradient(90deg,#00C07B"]').forEach(el => {
+    el.style.width = rot.pctAcc + '%';
+    const txt = el.textContent.trim();
+    if (txt.startsWith('✓')) el.textContent = '✓ ' + rot.acc;
+  });
+
+  // Progress bar IDLE
+  document.querySelectorAll('[style*="background:rgba(255,255,255,.06)"]').forEach(el => {
+    if (el.textContent.includes('IDLE')) el.textContent = 'IDLE ' + rot.idle;
+  });
+
+  // ── Update live badge header ──
+  document.querySelectorAll('.live-badge, [class*="live"]').forEach(el => {
+    if (el.textContent.includes('ROT') && el.textContent.includes('Anomali')) {
+      el.textContent = rot.total + ' ROT 2026 · ' + anom.total + ' Anomali · 40 Alat Uji';
+    }
+  });
+
+  // ── Update kartu Anomali ──
+  setKartu('backlog aktif', anom.notYet);
+
+  // ── Update tabel JS LOKASI_DATA total row ──
+  // (otomatis ter-render ulang lewat refreshAll di bawah)
+
+  // ── Re-render semua chart & tabel ──
+  if (typeof refreshAll === 'function') refreshAll();
+  if (typeof drawDonut  === 'function') drawDonut();
+
+  // ── Update timestamp last-update ──
+  const tsEls = [document.getElementById('last-update'), document.getElementById('hd-ts'), document.getElementById('ft-ts')];
+  tsEls.forEach(el => { if (el && data.updated) el.textContent = '⏱ Live · ' + data.updated; });
+}
+
+// Helper: update nilai kartu berdasarkan subtitle teks
+function setKartu(subLabel, val) {
+  document.querySelectorAll('.ku').forEach(ku => {
+    if (ku.textContent.trim() === subLabel) {
+      const kv = ku.previousElementSibling;
+      if (kv && kv.classList.contains('kv')) kv.textContent = val;
+    }
+  });
+}
+
+// Helper: update nilai + subtitle kartu Part 2
+function setKartuPct(subKeyword, val, newSub) {
+  document.querySelectorAll('.ku').forEach(ku => {
+    if (ku.textContent.includes(subKeyword)) {
+      const kv = ku.previousElementSibling;
+      if (kv && kv.classList.contains('kv')) {
+        kv.textContent = val;
+        ku.textContent = newSub;
+      }
+    }
+  });
+}
+
+// ── Jalankan fetch saat halaman siap ──
+window.addEventListener('load', () => {
+  // Tambah badge status di header
+  const hdr = document.querySelector('.live-badge') || document.querySelector('[class*="badge"]');
+  const badge = document.createElement('span');
+  badge.id = 'live-fetch-badge';
+  badge.style.cssText = 'font-size:11px;padding:2px 8px;border-radius:99px;background:rgba(0,113,197,.12);color:var(--A);margin-left:8px;font-family:JetBrains Mono,monospace;';
+  badge.textContent = '🔄 Memuat...';
+  const nav = document.querySelector('.tabs-bar');
+  if (nav) nav.insertAdjacentElement('beforebegin', badge);
+
+  // Fetch setelah chart statis selesai render (delay kecil)
+  setTimeout(fetchLiveData, 800);
+});
 </script>
 
 
