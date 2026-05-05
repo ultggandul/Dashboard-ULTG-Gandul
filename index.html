@@ -4262,7 +4262,7 @@ function fetchLiveData() {
     if (s) s.remove();
     if (badge) { badge.textContent = '⚠ Timeout · data statis'; badge.style.color = 'var(--O)'; }
     console.warn('[ULTG Live] Timeout setelah 10 detik');
-  }, 10000);
+  }, 20000);
 
   // Fungsi yang dipanggil Apps Script saat data siap
   window[cbName] = function(data) {
@@ -4282,17 +4282,18 @@ function fetchLiveData() {
     console.log('[ULTG Live] Data berhasil diload via JSONP:', data);
   };
 
-  // Inject script tag JSONP
+  // Inject script tag JSONP ke body (lebih reliable untuk redirect)
   const script = document.createElement('script');
-  script.id  = 'jsonp-loader';
-  script.src = SHEETS_API_URL + '?callback=' + cbName + '&t=' + Date.now();
+  script.id    = 'jsonp-loader';
+  script.async = true;
+  script.src   = SHEETS_API_URL + '?callback=' + cbName + '&t=' + Date.now();
   script.onerror = function() {
     clearTimeout(timer);
     delete window[cbName];
     if (badge) { badge.textContent = '⚠ Gagal · data statis'; badge.style.color = 'var(--O)'; }
     console.warn('[ULTG Live] Script load error');
   };
-  document.head.appendChild(script);
+  document.body.appendChild(script);
 }
 
 function applyLiveData(data) {
