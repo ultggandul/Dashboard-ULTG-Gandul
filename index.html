@@ -717,7 +717,7 @@ footer{
 
   <div class="filter-bar">
     <button class="tbtn on" onclick="filterDetail(&#39;all&#39;,this)">Semua (69)</button>
-    <button class="tbtn" onclick="filterDetail(&#39;high&#39;,this)">🔴 High Risk (3)</button>
+    <button class="tbtn" id="btn-high-risk" onclick="filterDetail(&#39;high&#39;,this)">🔴 High Risk (<span id="high-risk-label">3</span>)</button>
     <button class="tbtn" onclick="filterDetail(&#39;idle&#39;,this)">🟡 IDLE (19)</button>
     <button class="tbtn" onclick="filterDetail(&#39;anom&#39;,this)">⚠ Ada Anomali (30)</button>
     <button class="tbtn" onclick="filterDetail(&#39;acc&#39;,this)">✅ Accomplished (17)</button>
@@ -1938,12 +1938,27 @@ footer{
 
   <!-- Summary insight bar -->
   <div style="background:linear-gradient(135deg,rgba(0,113,197,.1),rgba(0,192,123,.08));border:1px solid rgba(0,192,123,.2);border-radius:14px;padding:16px 20px">
-    <div style="font-size:13px;font-weight:700;color:var(--G);margin-bottom:12px">💡 Ringkasan Analisa &amp; Rekomendasi</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;font-size:13px">
-      <div style="display:flex;gap:8px"><span style="color:var(--G);font-size:16px">①</span><span><strong style="color:var(--T)">Akselerasi signifikan:</strong> Dari 5.2/bln (2024) → 9.7/bln (2026 Q1) — dari 8.3/bln (2024) ke 7.3/bln (2025), turun sedikit namun stabil. Pertahankan momentum ini.</span></div>
-      <div style="display:flex;gap:8px"><span style="color:var(--A);font-size:16px">②</span><span><strong style="color:var(--T)">Fokus FASUM &amp; HARPRO:</strong> 2 bidang ini menahan 90% backlog. Koordinasi anggaran UPT dan jadwal PADAM perlu dipercepat.</span></div>
-      <div style="display:flex;gap:8px"><span style="color:var(--O);font-size:16px">③</span><span><strong style="color:var(--T)">Bundling PADAM + ROT:</strong> 76 anomali butuh padam — integrasikan dengan 69 ROT 2026 agar birokrasi izin padam lebih efisien.</span></div>
-      <div style="display:flex;gap:8px"><span style="color:var(--P);font-size:16px">④</span><span><strong style="color:var(--T)">Target realistis 2026:</strong> Jika 12/bln → ~90 item done tahun ini → backlog turun ke ~66. Targetkan <strong style="color:var(--P)">clear sebelum ROT 2028</strong>.</span></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+      <div style="font-size:13px;font-weight:700;color:var(--G)">💡 Ringkasan Analisa &amp; Rekomendasi</div>
+      <div id="ai-badge" style="font-size:10px;padding:2px 8px;border-radius:99px;background:rgba(167,139,250,.15);color:#A78BFA;font-family:'JetBrains Mono',monospace">✨ AI</div>
+      <div id="ai-status" style="font-size:11px;color:var(--M)">memuat analisis...</div>
+    </div>
+    <div id="ai-narasi-wrap" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;font-size:13px">
+      <div style="display:flex;gap:8px"><span style="color:var(--G);font-size:16px">①</span><span id="ai-rec-1"><strong style="color:var(--T)">Akselerasi signifikan:</strong> Dari 5.2/bln (2024) → 9.7/bln (2026 Q1) — dari 8.3/bln (2024) ke 7.3/bln (2025), turun sedikit namun stabil. Pertahankan momentum ini.</span></div>
+      <div style="display:flex;gap:8px"><span style="color:var(--A);font-size:16px">②</span><span id="ai-rec-2"><strong style="color:var(--T)">Fokus FASUM &amp; HARPRO:</strong> 2 bidang ini menahan 90% backlog. Koordinasi anggaran UPT dan jadwal PADAM perlu dipercepat.</span></div>
+      <div style="display:flex;gap:8px"><span style="color:var(--O);font-size:16px">③</span><span id="ai-rec-3"><strong style="color:var(--T)">Bundling PADAM + ROT:</strong> 76 anomali butuh padam — integrasikan dengan 69 ROT 2026 agar birokrasi izin padam lebih efisien.</span></div>
+      <div style="display:flex;gap:8px"><span style="color:var(--P);font-size:16px">④</span><span id="ai-rec-4"><strong style="color:var(--T)">Target realistis 2026:</strong> Jika 12/bln → ~90 item done tahun ini → backlog turun ke ~66. Targetkan <strong style="color:var(--P)">clear sebelum ROT 2028</strong>.</span></div>
+    </div>
+    <!-- AI Ringkasan & Prediksi -->
+    <div id="ai-ringkasan-block" style="display:none;margin-top:14px;padding-top:12px;border-top:0.5px solid rgba(0,192,123,.2)">
+      <div style="font-size:12px;color:var(--M);margin-bottom:6px;font-weight:500">📋 Ringkasan Eksekutif</div>
+      <div id="ai-ringkasan" style="font-size:13px;color:var(--T);line-height:1.7"></div>
+      <div style="font-size:12px;color:var(--M);margin:10px 0 6px;font-weight:500">🎯 Prediksi Akhir 2026</div>
+      <div id="ai-prediksi" style="font-size:13px;color:var(--A);line-height:1.7"></div>
+      <div style="font-size:12px;color:var(--M);margin:10px 0 6px;font-weight:500">⚠ Temuan Kritis</div>
+      <div id="ai-kritis" style="font-size:13px;color:var(--O);line-height:1.7"></div>
+      <div style="font-size:12px;color:var(--M);margin:10px 0 6px;font-weight:500">🔗 Relasi Anomali ↔ ROT</div>
+      <div id="ai-anomali-analisa" style="font-size:13px;color:var(--T);line-height:1.7"></div>
     </div>
   </div>
 
@@ -2382,7 +2397,7 @@ footer{
     <div class="krow" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr));margin-bottom:14px">
       <div class="kc" style="--kc:var(--G)"><div class="kl">E[X] Baseline</div><div class="kv gg">57.1</div><div class="ku">dari 69 item (82.8%)</div></div>
       <div class="kc" style="--kc:var(--A)"><div class="kl">Avg Probability</div><div class="kv aa">86.9%</div><div class="ku">rata-rata P tiap item</div></div>
-      <div class="kc" style="--kc:var(--R)"><div class="kl">High Risk (P&lt;55%)</div><div class="kv rr">3</div><div class="ku">item probabilitas rendah</div></div>
+      <div class="kc" style="--kc:var(--R)"><div class="kl">High Risk (P&lt;55%)</div><div class="kv rr" id="ai-high-risk-count">3</div><div class="ku">item probabilitas rendah</div></div>
       <div class="kc" style="--kc:var(--G)"><div class="kl">Skenario Optimistik</div><div class="kv gg">61.7</div><div class="ku">E[X] terbaik = 89.5%</div></div>
       <div class="kc" style="--kc:var(--R)"><div class="kl">Skenario Pesimistik</div><div class="kv rr">49.0</div><div class="ku">E[X] terburuk = 71.0%</div></div>
     </div>
@@ -4240,6 +4255,146 @@ function handleFile(f) {
   reader.readAsBinaryString(f);
 }
 
+// ── REBUILD ANOMALI DATA DARI RAW ROWS ──────────────────────
+function rebuildANOMData(rows) {
+  const GI_LIST = [
+    'GITET 500KV GANDUL','GITET 500KV DEPOK',
+    'GI 150KV GANDUL','GI 150KV DEPOK',
+    'GI 150KV CIMANGGIS','GIS 150KV DEPOK BARU','ULTG GANDUL'
+  ];
+  const giMap = {};
+  GI_LIST.forEach(g => {
+    giMap[g] = { gi:g, total:0, done:0, notyet:0, pengajuan:0, padam:0, padamBack:0 };
+  });
+  const bidangMap = {};
+  const monthDoneMap = {};
+
+  rows.forEach(r => {
+    const st = (r.status||'').toLowerCase();
+    const isDone      = ['done','selesai','resolved','complete','completed','close','closed','fix','fixed'].some(s=>st.includes(s));
+    const isPengajuan = ['pengajuan upt','pengajuan','upt'].some(s=>st.includes(s));
+    const isNotYet    = !isDone && !isPengajuan;
+    const isPadam     = (r.pengerjaan||'').toLowerCase().includes('padam');
+
+    const lokasiUp = (r.lokasi||'').toUpperCase().trim();
+    const matchGI  = GI_LIST.find(g => lokasiUp===g || lokasiUp.includes(g) || g.includes(lokasiUp)) || null;
+    if (matchGI) {
+      giMap[matchGI].total++;
+      if (isDone)      giMap[matchGI].done++;
+      if (isPengajuan) giMap[matchGI].pengajuan++;
+      if (isNotYet)    giMap[matchGI].notyet++;
+      if (isPadam)     giMap[matchGI].padam++;
+    }
+
+    const bidang = (r.bidang||'LAINNYA').toUpperCase().trim() || 'LAINNYA';
+    if (!bidangMap[bidang]) bidangMap[bidang] = { bidang, total:0, done:0, notyet:0 };
+    bidangMap[bidang].total++;
+    if (isDone)   bidangMap[bidang].done++;
+    if (isNotYet) bidangMap[bidang].notyet++;
+
+    if (isDone && r.tgl && r.tgl.length >= 7) {
+      const key = r.tgl.substring(0,7);
+      monthDoneMap[key] = (monthDoneMap[key]||0) + 1;
+    }
+  });
+
+  // Update ANOM_GI
+  ANOM_GI.length = 0;
+  GI_LIST.forEach(g => { if (giMap[g].total > 0) ANOM_GI.push(giMap[g]); });
+
+  // Update ANOM_BIDANG
+  ANOM_BIDANG.length = 0;
+  Object.values(bidangMap).sort((a,b)=>b.total-a.total).forEach(b=>ANOM_BIDANG.push(b));
+
+  // Update ANOM_DATA (bulanan/kuartal/semester/tahunan)
+  const lbls = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agt','Sep','Okt','Nov','Des'];
+  const sortedKeys = Object.keys(monthDoneMap).sort();
+  if (sortedKeys.length > 0) {
+    const months = sortedKeys.map(k => {
+      const yr = parseInt(k.substring(0,4));
+      const mo = parseInt(k.substring(5,7));
+      return { label: lbls[mo-1]+' '+String(yr).substring(2), yr, mo, done: monthDoneMap[k] };
+    });
+    ANOM_DATA.month = months;
+    const qMap={}, sMap={}, yMap={};
+    months.forEach(m => {
+      const qn = Math.ceil(m.mo/3), sn = m.mo<=6?1:2;
+      const qk='Q'+qn+'-'+m.yr, sk='S'+sn+'-'+m.yr, yk=String(m.yr);
+      if (!qMap[qk]) qMap[qk]={label:qk,yr:m.yr,done:0}; qMap[qk].done+=m.done;
+      if (!sMap[sk]) sMap[sk]={label:sk,yr:m.yr,done:0}; sMap[sk].done+=m.done;
+      if (!yMap[yk]) yMap[yk]={label:yk,yr:m.yr,done:0}; yMap[yk].done+=m.done;
+    });
+    ANOM_DATA.quarter  = Object.values(qMap).sort((a,b)=>a.label.localeCompare(b.label));
+    ANOM_DATA.semester = Object.values(sMap).sort((a,b)=>a.label.localeCompare(b.label));
+    ANOM_DATA.year     = Object.values(yMap).sort((a,b)=>a.yr-b.yr);
+  }
+}
+
+// ── APPLY ML ANALYSIS DATA ──────────────────────────────────
+function applyMLData(ml) {
+  const setBadge = (txt, color) => {
+    const s = document.getElementById('ai-status');
+    if (s) { s.textContent = txt; s.style.color = color||'var(--M)'; }
+  };
+  if (!ml) { setBadge('— data statis', 'var(--M)'); return; }
+
+  // 1. Apply prob per item
+  if (ml.probScores && ml.probScores.length > 0) {
+    const probMap = {};
+    ml.probScores.forEach(p => { probMap[p.no] = p.prob; });
+    ROT.forEach(r => {
+      if (probMap[r.no] !== undefined) {
+        r.prob = probMap[r.no];
+      } else {
+        const st = (r.status||'').toLowerCase();
+        const hasAnom = (r.anom||'').includes('ANOMALI');
+        if (st.includes('accomplished')) r.prob = 1.0;
+        else if (st.includes('efisiensi'))    r.prob = 0.5;
+        else if (st.includes('abk'))          r.prob = 0.15;
+        else if (st.includes('re-sched'))     r.prob = 0.25;
+        else if (st.includes('idle'))         r.prob = hasAnom ? 0.72 : 0.38;
+        else if (st.includes('scheduled'))    r.prob = hasAnom ? 0.87 : 0.76;
+        else r.prob = 0.5;
+      }
+    });
+  }
+
+  // 2. Narasi rekomendasi
+  if (ml.narasi) {
+    const n = ml.narasi;
+    if (n.rekomendasi) {
+      n.rekomendasi.slice(0,4).forEach((rek, i) => {
+        const el = document.getElementById('ai-rec-'+(i+1));
+        if (el) el.innerHTML = rek;
+      });
+    }
+    const setEl = (id, txt) => { const e=document.getElementById(id); if(e&&txt) e.innerHTML=txt; };
+    setEl('ai-ringkasan', n.ringkasan);
+    setEl('ai-prediksi', n.prediksi);
+    setEl('ai-kritis', n.temuan_kritis);
+    setEl('ai-anomali-analisa', n.analisa_anomali);
+    const blk = document.getElementById('ai-ringkasan-block');
+    if (blk) blk.style.display = 'block';
+  }
+
+  // 3. Stats
+  if (ml.stats) {
+    const hrc = ml.stats.high_risk_count || 0;
+    const e1 = document.getElementById('ai-high-risk-count');
+    const e2 = document.getElementById('high-risk-label');
+    if (e1) e1.textContent = hrc;
+    if (e2) e2.textContent = hrc;
+  }
+
+  // 4. Badge
+  setBadge('✓ AI analysed', '#00C07B');
+
+  // 5. Re-render prob charts
+  [drawProbHistogram, drawProbCumul, buildDetailTable].forEach(fn => {
+    try { if (typeof fn==='function') fn(); } catch(e) {}
+  });
+}
+
 // ─── LIVE DATA FROM GOOGLE SHEETS ────────────────────────────
 // Fetch otomatis saat halaman dibuka — data selalu terbaru dari Sheets
 
@@ -4357,12 +4512,28 @@ function applyLiveData(data) {
   // ── Update tabel JS LOKASI_DATA total row ──
   // (otomatis ter-render ulang lewat refreshAll di bawah)
 
+  // ── Update array ROT[] dengan data terbaru dari Sheets ──
+  if (data.rotRows && data.rotRows.length > 0) {
+    ROT.length = 0;
+    data.rotRows.forEach(r => ROT.push(r));
+    console.log('[ULTG Live] ROT array diupdate:', ROT.length, 'baris');
+  }
+
+  // ── Update array ANOMALI dari Sheets ──
+  if (data.anomRows && data.anomRows.length > 0) {
+    rebuildANOMData(data.anomRows);
+    console.log('[ULTG Live] ANOM data diupdate:', data.anomRows.length, 'baris');
+  }
+
   // ── Re-render semua chart & tabel ──
   const fns = [drawDonut, buildLokasiBars, drawStackBar, buildKatProgress,
                buildResumeTable, buildDetailTable, buildAnomGiBars,
                buildAnomBidangBars, buildAnomGiTable, buildAlatTable,
                drawYearlyChart, drawMonthlyAnomChart, drawCumulAnomChart];
   fns.forEach(fn => { try { if (typeof fn === 'function') fn(); } catch(e) {} });
+
+  // ── Apply ML analysis (prob scores + narasi AI) ──
+  applyMLData(data.ml || null);
 
   // ── Update timestamp last-update ──
   const tsEls = [document.getElementById('last-update'), document.getElementById('hd-ts'), document.getElementById('ft-ts')];
@@ -4392,16 +4563,34 @@ function setKartuPct(subKeyword, val, newSub) {
   });
 }
 
-// ── Jalankan fetch saat halaman siap ──
+// ── Jalankan fetch saat halaman siap + auto-polling ──
 window.addEventListener('load', () => {
-  // Update hd-ts sebagai status indicator
+  // Reuse elemen hd-ts sebagai badge status
   const hdTs = document.getElementById('hd-ts');
   if (hdTs) {
     hdTs.innerHTML = '🔄 Memuat data live...';
-    hdTs.id = 'live-fetch-badge'; // reuse elemen yang sudah ada
+    hdTs.id = 'live-fetch-badge';
   }
-  // Fetch setelah render selesai
+
+  // Fetch pertama setelah render selesai
   setTimeout(fetchLiveData, 1200);
+
+  // Auto-polling: fetch ulang setiap 5 menit
+  // Ganti 300000 (5 menit) sesuai kebutuhan:
+  // 60000 = 1 menit, 120000 = 2 menit, 300000 = 5 menit
+  const POLL_INTERVAL = 300000;
+  setInterval(() => {
+    console.log('[ULTG Live] Auto-polling...');
+    fetchLiveData();
+  }, POLL_INTERVAL);
+
+  // Fetch ulang saat tab/window kembali aktif (user balik ke tab ini)
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      console.log('[ULTG Live] Tab aktif, refresh data...');
+      fetchLiveData();
+    }
+  });
 });
 </script>
 
