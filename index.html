@@ -265,6 +265,8 @@ footer{
     <div class="hd-meta">
       <div class="live-badge"><div class="dot"></div>69 ROT 2026 · 357 Anomali · 40 Alat Uji</div>
       <div style="font-size:11px;color:var(--M);margin-top:6px;text-align:right" id="hd-ts">04 Mei 2026 — Data diperbarui</div>
+      <div id="realtime-clock" style="font-size:12px;color:var(--A);margin-top:3px;text-align:right;font-family:'JetBrains Mono',monospace;font-weight:500;letter-spacing:0.02em"></div>
+      <div style="font-size:12px;color:var(--T);margin-top:4px;text-align:right;font-family:'JetBrains Mono',monospace;letter-spacing:0.03em" id="realtime-clock">--</div>
     </div>
   </div>
   <div class="tabs-bar">
@@ -4563,6 +4565,51 @@ function setKartuPct(subKeyword, val, newSub) {
   });
 }
 
+// ── JAM REALTIME — update setiap detik ──────────────────────
+function updateRealtimeClock() {
+  const el = document.getElementById('realtime-clock');
+  if (!el) return;
+  const now  = new Date();
+  const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agt','Sep','Okt','Nov','Des'];
+  const hari  = days[now.getDay()];
+  const tgl   = String(now.getDate()).padStart(2,'0');
+  const bln   = months[now.getMonth()];
+  const thn   = now.getFullYear();
+  const jam   = String(now.getHours()).padStart(2,'0');
+  const menit = String(now.getMinutes()).padStart(2,'0');
+  const detik = String(now.getSeconds()).padStart(2,'0');
+  el.textContent = hari + ', ' + tgl + ' ' + bln + ' ' + thn + ' · ' + jam + ':' + menit + ':' + detik + ' WIB';
+}
+
+// Jalankan langsung + update tiap detik
+updateRealtimeClock();
+setInterval(updateRealtimeClock, 1000);
+
+// ── Real-time clock (update setiap detik) ──────────────────
+function startRealtimeClock() {
+  const HARI = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const BULAN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agt','Sep','Okt','Nov','Des'];
+
+  function updateClock() {
+    const now  = new Date();
+    const wib  = new Date(now.getTime() + (7 * 60 * 60 * 1000 - now.getTimezoneOffset() * 60 * 1000));
+    const hari = HARI[wib.getDay()];
+    const tgl  = String(wib.getDate()).padStart(2,'0');
+    const bln  = BULAN[wib.getMonth()];
+    const thn  = wib.getFullYear();
+    const jam  = String(wib.getHours()).padStart(2,'0');
+    const mnt  = String(wib.getMinutes()).padStart(2,'0');
+    const dtk  = String(wib.getSeconds()).padStart(2,'0');
+
+    const el = document.getElementById('realtime-clock');
+    if (el) el.textContent = hari + ', ' + tgl + ' ' + bln + ' ' + thn + ' · ' + jam + ':' + mnt + ':' + dtk + ' WIB';
+  }
+
+  updateClock();
+  setInterval(updateClock, 1000);
+}
+
 // ── Jalankan fetch saat halaman siap + auto-polling ──
 window.addEventListener('load', () => {
   // Reuse elemen hd-ts sebagai badge status
@@ -4571,6 +4618,9 @@ window.addEventListener('load', () => {
     hdTs.innerHTML = '🔄 Memuat data live...';
     hdTs.id = 'live-fetch-badge';
   }
+
+  // Mulai real-time clock
+  startRealtimeClock();
 
   // Fetch pertama setelah render selesai
   setTimeout(fetchLiveData, 1200);
