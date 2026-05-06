@@ -4593,7 +4593,9 @@ function startRealtimeClock() {
 
   function updateClock() {
     const now  = new Date();
-    const wib  = new Date(now.getTime() + (7 * 60 * 60 * 1000 - now.getTimezoneOffset() * 60 * 1000));
+    // Konversi ke WIB (UTC+7) — apapun timezone browser pengunjung
+    const utcMs = now.getTime() + (now.getTimezoneOffset() * 60 * 1000);
+    const wib   = new Date(utcMs + (7 * 60 * 60 * 1000));
     const hari = HARI[wib.getDay()];
     const tgl  = String(wib.getDate()).padStart(2,'0');
     const bln  = BULAN[wib.getMonth()];
