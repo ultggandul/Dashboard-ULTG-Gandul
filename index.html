@@ -299,21 +299,21 @@ footer{
   <!-- PART 1: TOTAL KESELURUHAN (69 item) -->
   <div class="sec" style="margin-top:8px"><div class="sd" style="background:var(--M)"></div><div class="sl" style="color:var(--M);font-size:14px">Part 1 — Total Keseluruhan ROT 2026 (termasuk Efisiensi)</div><div class="sr"></div></div>
   <div class="krow" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr));margin-bottom:20px">
-    <div class="kc" style="--kc:var(--A)"><div class="kl">Total Item ROT</div><div class="kv aa">69</div><div class="ku">seluruh daftar 2026</div></div>
-    <div class="kc" style="--kc:var(--G)"><div class="kl">Accomplished</div><div class="kv gg">17</div><div class="ku">sudah terlaksana</div></div>
-    <div class="kc" style="--kc:var(--Y)"><div class="kl">Efisiensi (→2028)</div><div class="kv yy" style="opacity:.7">33</div><div class="ku">ditunda ke 2028</div></div>
-    <div class="kc" style="--kc:var(--R)"><div class="kl">IDLE</div><div class="kv rr">11</div><div class="ku">belum terjadwal</div></div>
-    <div class="kc" style="--kc:var(--P)"><div class="kl">Scheduled</div><div class="kv pp">7</div><div class="ku">terjadwal menunggu</div></div>
+    <div class="kc" style="--kc:var(--A)"><div class="kl">Total Item ROT</div><div class="kv aa" id="kv-rot-total">69</div><div class="ku">seluruh daftar 2026</div></div>
+    <div class="kc" style="--kc:var(--G)"><div class="kl">Accomplished</div><div class="kv gg" id="kv-rot-acc1">17</div><div class="ku">sudah terlaksana</div></div>
+    <div class="kc" style="--kc:var(--Y)"><div class="kl">Efisiensi (→2028)</div><div class="kv yy" id="kv-rot-efi" style="opacity:.7">33</div><div class="ku">ditunda ke 2028</div></div>
+    <div class="kc" style="--kc:var(--R)"><div class="kl">IDLE</div><div class="kv rr" id="kv-rot-idle1">11</div><div class="ku" id="ku-rot-idle1">belum terjadwal</div></div>
+    <div class="kc" style="--kc:var(--P)"><div class="kl">Scheduled</div><div class="kv pp" id="kv-rot-sch1">7</div><div class="ku">terjadwal menunggu</div></div>
     <div class="kc" style="--kc:var(--R)"><div class="kl">Re-Sched / ABK</div><div class="kv rr">2</div><div class="ku">risiko tidak jadi</div></div>
-    <div class="kc" style="--kc:var(--O)"><div class="kl">Ada Anomali</div><div class="kv oo">30</div><div class="ku">bay bermasalah</div></div>
+    <div class="kc" style="--kc:var(--O)"><div class="kl">Ada Anomali</div><div class="kv oo" id="kv-rot-anom">30</div><div class="ku">bay bermasalah</div></div>
   </div>
 
   <!-- PART 2: ROT AKTIF 2026 (minus Efisiensi = 36 item) -->
   <div class="sec" style="margin-top:0"><div class="sd" style="background:var(--G)"></div><div class="sl" style="font-size:14px">Part 2 — Progres Aktual ROT 2026 (minus Efisiensi → 69 − 33 = <span style="color:var(--G)">36 item aktif</span>)</div><div class="sr"></div></div>
   <div class="krow" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr));margin-bottom:16px">
-    <div class="kc" style="--kc:var(--A)"><div class="kl">Target Aktif 2026</div><div class="kv aa">36</div><div class="ku">item yang dinilai 2026</div></div>
-    <div class="kc" style="--kc:var(--G)"><div class="kl">Accomplished</div><div class="kv gg">17</div><div class="ku" style="color:var(--G);font-weight:700">47.2% selesai</div></div>
-    <div class="kc" style="--kc:var(--R)"><div class="kl">IDLE</div><div class="kv rr">11</div><div class="ku">30.6% belum jalan</div></div>
+    <div class="kc" style="--kc:var(--A)"><div class="kl">Target Aktif 2026</div><div class="kv aa" id="kv-rot-aktif">36</div><div class="ku">item yang dinilai 2026</div></div>
+    <div class="kc" style="--kc:var(--G)"><div class="kl">Accomplished</div><div class="kv gg" id="kv-rot-acc2">17</div><div class="ku" id="ku-rot-acc-pct" style="color:var(--G);font-weight:700">47.2% selesai</div></div>
+    <div class="kc" style="--kc:var(--R)"><div class="kl">IDLE</div><div class="kv rr" id="kv-rot-idle2">11</div><div class="ku" id="ku-rot-idle-pct">30.6% belum jalan</div></div>
     <div class="kc" style="--kc:var(--P)"><div class="kl">Scheduled</div><div class="kv pp">7</div><div class="ku">19.4% akan jalan</div></div>
     <div class="kc" style="--kc:var(--O)"><div class="kl">Re-Scheduled</div><div class="kv oo">0</div><div class="ku">0% diulang</div></div>
     <div class="kc" style="--kc:var(--R)"><div class="kl">ABK</div><div class="kv rr">1</div><div class="ku">2.8% risiko batal</div></div>
@@ -4544,41 +4544,32 @@ function applyLiveData(data) {
     rot.lokasi.forEach(l => LOKASI_DATA.push(l));
   }
 
-  // ── Update kartu stats ROT (Part 1) ──
-  setKartu('sudah terlaksana', rot.acc);
-  setKartu('belum terjadwal',  rot.idle);
-  setKartu('bay bermasalah',   rot.anom);
+  // ── Update kartu ROT Part 1 via ID ──
+  const setT = (id, v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+  setT('kv-rot-total', rot.total);
+  setT('kv-rot-acc1',  rot.acc);
+  setT('kv-rot-efi',   rot.efi);
+  setT('kv-rot-idle1', rot.idle);
+  setT('kv-rot-anom',  rot.anom);
+  setT('kv-rot-sch1',  rot.sch);
 
-  // ── Update kartu stats ROT (Part 2 — dengan %) ──
-  setKartuPct('selesai',      rot.acc,  rot.pctAcc  + '% selesai');
-  setKartuPct('belum jalan',  rot.idle, rot.pctIdle + '% belum jalan');
-  setKartuPct('diulang',      rot.res,  rot.pctRes  + '% diulang');
+  // ── Update kartu ROT Part 2 via ID ──
+  setT('kv-rot-aktif',  rot.aktif || (rot.total - rot.efi));
+  setT('kv-rot-acc2',   rot.acc);
+  setT('kv-rot-idle2',  rot.idle);
+  setT('ku-rot-acc-pct',  rot.pctAcc  + '% selesai');
+  setT('ku-rot-idle-pct', rot.pctIdle + '% belum jalan');
 
-  // ── Update badge & progress bar ──
+  // ── Badge progress ROT ──
   const badge = document.getElementById('rot-pct-badge');
   if (badge) badge.textContent = rot.pctAcc + '% Accomplished';
 
-  // Progress bar Accomplished
-  document.querySelectorAll('[style*="linear-gradient(90deg,#00C07B"]').forEach(el => {
-    el.style.width = rot.pctAcc + '%';
-    const txt = el.textContent.trim();
-    if (txt.startsWith('✓')) el.textContent = '✓ ' + rot.acc;
-  });
-
-  // Progress bar IDLE
-  document.querySelectorAll('[style*="background:rgba(255,255,255,.06)"]').forEach(el => {
-    if (el.textContent.includes('IDLE')) el.textContent = 'IDLE ' + rot.idle;
-  });
-
-  // ── Update live badge header ──
+  // ── Update header badge jumlah ROT/Anomali ──
   document.querySelectorAll('.live-badge, [class*="live"]').forEach(el => {
     if (el.textContent.includes('ROT') && el.textContent.includes('Anomali')) {
       el.textContent = rot.total + ' ROT 2026 · ' + anom.total + ' Anomali · 40 Alat Uji';
     }
   });
-
-  // ── Update kartu Anomali ──
-  setKartu('backlog aktif', anom.notYet);
 
   // ── Update tabel JS LOKASI_DATA total row ──
   // (otomatis ter-render ulang lewat refreshAll di bawah)
