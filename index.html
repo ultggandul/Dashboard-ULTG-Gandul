@@ -1864,18 +1864,18 @@ footer{
       <div style="display:flex;flex-direction:column;gap:8px">
         <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(0,113,197,.07);border-radius:8px">
           <span style="font-size:12.5px">Rata-rata 2024</span>
-          <div style="text-align:right"><span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:16px;font-weight:700;color:var(--A)">5.2</span><span style="font-size:10px;color:var(--M)"> item/bln</span></div>
+          <div style="text-align:right"><span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:16px;font-weight:700;color:var(--A)" id="ai-speed-2024">5.2</span><span style="font-size:10px;color:var(--M)"> item/bln</span></div>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(0,192,123,.07);border-radius:8px">
           <span style="font-size:12.5px">Rata-rata 2025</span>
-          <div style="text-align:right"><span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:16px;font-weight:700;color:var(--G)">8.2</span><span style="font-size:10px;color:var(--M)"> item/bln</span></div>
+          <div style="text-align:right"><span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:16px;font-weight:700;color:var(--G)" id="ai-speed-2025">8.2</span><span style="font-size:10px;color:var(--M)"> item/bln</span></div>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,214,0,.07);border-radius:8px">
           <span style="font-size:12.5px">Rata-rata 2026 (Q1)</span>
-          <div style="text-align:right"><span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:16px;font-weight:700;color:var(--Y)">9.7</span><span style="font-size:10px;color:var(--M)"> item/bln</span></div>
+          <div style="text-align:right"><span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:16px;font-weight:700;color:var(--Y)" id="ai-speed-2026">9.7</span><span style="font-size:10px;color:var(--M)"> item/bln</span></div>
         </div>
         <div style="padding:10px 12px;background:rgba(0,192,123,.05);border:1px solid rgba(0,192,123,.2);border-radius:8px;font-size:12px;color:var(--M);line-height:1.6">
-          ✅ Kecepatan penyelesaian meningkat <strong style="color:var(--G)">+86.5%</strong> dari 2024 ke 2025, dan terus naik di 2026. Momentum ini harus dipertahankan.
+          <span id="ai-tren-narasi">✅ Kecepatan penyelesaian meningkat <strong style="color:var(--G)">+86.5%</strong> dari 2024 ke 2025, dan terus naik di 2026. Momentum ini harus dipertahankan.</span>
         </div>
       </div>
     </div>
@@ -1890,17 +1890,17 @@ footer{
         <div style="padding:10px 12px;background:rgba(255,143,0,.07);border-radius:8px">
           <div style="font-size:11px;color:var(--M);margin-bottom:3px">Backlog tersisa</div>
           <div style="display:flex;justify-content:space-between">
-            <span style="font-size:12.5px">158 item NOT YET + Pengajuan</span>
-            <span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:16px;font-weight:700;color:var(--O)">156</span>
+            <span style="font-size:12.5px" id="ai-backlog-label">158 item NOT YET + Pengajuan</span>
+            <span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:16px;font-weight:700;color:var(--O)" id="ai-backlog-sisa">156</span>
           </div>
         </div>
         <div style="padding:10px 12px;background:rgba(0,113,197,.07);border-radius:8px">
           <div style="font-size:11px;color:var(--M);margin-bottom:3px">Kecepatan saat ini (2026 Q1)</div>
-          <div style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:22px;font-weight:700;color:var(--A)">7.3 item/bln</div>
+          <div style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:22px;font-weight:700;color:var(--A)" id="ai-speed-current">7.3 item/bln</div>
         </div>
         <div style="padding:10px 12px;background:rgba(124,77,255,.07);border:1px solid rgba(124,77,255,.2);border-radius:8px">
           <div style="font-size:11px;color:var(--M);margin-bottom:3px">Estimasi clear backlog</div>
-          <div style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:18px;font-weight:700;color:var(--P)">±21 bulan → Des 2027</div>
+          <div style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:18px;font-weight:700;color:var(--P)" id="ai-estimasi-clear">±21 bulan → Des 2027</div>
           <div style="font-size:11px;color:var(--M);margin-top:3px">Jika kecepatan 7.3/bln (rata-rata 2025) dipertahankan</div>
         </div>
         <div style="padding:10px 12px;background:rgba(0,192,123,.05);border:1px solid rgba(0,192,123,.2);border-radius:8px">
@@ -1916,22 +1916,22 @@ footer{
         <div style="width:28px;height:28px;border-radius:8px;background:rgba(229,57,53,.15);display:flex;align-items:center;justify-content:center;font-size:15px">🔍</div>
         Identifikasi Bottleneck
       </div>
-      <div style="display:flex;flex-direction:column;gap:8px">
+      <div id="ai-bottleneck-list" style="display:flex;flex-direction:column;gap:8px">
         <div style="padding:10px 12px;background:rgba(229,57,53,.07);border-radius:8px">
-          <div style="font-size:11px;font-weight:700;color:var(--R);margin-bottom:4px">⛔ FASUM — Tingkat done terendah</div>
-          <div style="font-size:12.5px;color:var(--M)">Hanya <strong style="color:var(--R)">33.8%</strong> selesai (25/74). Mayoritas butuh izin PADAM atau biaya UPT.</div>
+          <div style="font-size:11px;font-weight:700;color:var(--R);margin-bottom:4px" id="ai-bn-title-1">⛔ FASUM — Tingkat done terendah</div>
+          <div style="font-size:12.5px;color:var(--M)" id="ai-bn-desc-1">Hanya <strong style="color:var(--R)">33.8%</strong> selesai (25/74). Mayoritas butuh izin PADAM atau biaya UPT.</div>
         </div>
         <div style="padding:10px 12px;background:rgba(255,143,0,.07);border-radius:8px">
-          <div style="font-size:11px;font-weight:700;color:var(--O);margin-bottom:4px">⚠ HARPRO — Laju lambat 57.7%</div>
-          <div style="font-size:12.5px;color:var(--M)">64/111 DONE. Banyak pekerjaan dengan anggaran UPT yang antreannya panjang.</div>
+          <div style="font-size:11px;font-weight:700;color:var(--O);margin-bottom:4px" id="ai-bn-title-2">⚠ HARPRO — Laju lambat 57.7%</div>
+          <div style="font-size:12.5px;color:var(--M)" id="ai-bn-desc-2">64/111 DONE. Banyak pekerjaan dengan anggaran UPT yang antreannya panjang.</div>
         </div>
         <div style="padding:10px 12px;background:rgba(0,113,197,.07);border-radius:8px">
-          <div style="font-size:11px;font-weight:700;color:var(--A);margin-bottom:4px">📋 PADAM 76 item backlog</div>
-          <div style="font-size:12.5px;color:var(--M)">Butuh proses perijinan 2–4 bulan. <strong style="color:var(--A)">Bundling dengan ROT</strong> adalah strategi terbaik.</div>
+          <div style="font-size:11px;font-weight:700;color:var(--A);margin-bottom:4px" id="ai-bn-title-3">📋 PADAM 76 item backlog</div>
+          <div style="font-size:12.5px;color:var(--M)" id="ai-bn-desc-3">Butuh proses perijinan 2–4 bulan. <strong style="color:var(--A)">Bundling dengan ROT</strong> adalah strategi terbaik.</div>
         </div>
         <div style="padding:10px 12px;background:rgba(255,214,0,.06);border-radius:8px">
-          <div style="font-size:11px;font-weight:700;color:var(--Y);margin-bottom:4px">🏆 HARGI terbaik — 67.6%</div>
-          <div style="font-size:12.5px;color:var(--M)">75/111 DONE. Pola kerja HARGI bisa dijadikan referensi untuk bidang lain.</div>
+          <div style="font-size:11px;font-weight:700;color:var(--Y);margin-bottom:4px" id="ai-bn-title-4">🏆 HARGI terbaik — 67.6%</div>
+          <div style="font-size:12.5px;color:var(--M)" id="ai-bn-desc-4">75/111 DONE. Pola kerja HARGI bisa dijadikan referensi untuk bidang lain.</div>
         </div>
       </div>
     </div>
@@ -2647,7 +2647,7 @@ footer{
   <!-- === RISK A: ROT === -->
   <div style="background:rgba(0,113,197,.06);border:1px solid rgba(0,113,197,.2);border-radius:12px;padding:16px 20px;margin-bottom:16px">
     <div style="font-size:14px;font-weight:700;color:var(--A);margin-bottom:12px">📈 Analisa Risiko ROT 2026</div>
-    <div class="alrt ab">⚡ <strong>3 item HIGH RISK</strong> (P&lt;55%): #4 GI Cimanggis Trafo P=45%, #58 GITET Gandul Diameter Re-Scheduled P=30%, #68 GITET Gandul ABK P=15%. Perlu koordinasi intensif dengan UP2D dan UPT untuk menjaga target.</div>
+    <div class="alrt ab" id="ai-rot-risk-alert">⚡ <strong>3 item HIGH RISK</strong> (P&lt;55%): #4 GI Cimanggis Trafo P=45%, #58 GITET Gandul Diameter Re-Scheduled P=30%, #68 GITET Gandul ABK P=15%. Perlu koordinasi intensif dengan UP2D dan UPT untuk menjaga target.</div>
     <div class="g2">
       <!-- Risk quadrant -->
       <div class="card">
@@ -2696,7 +2696,7 @@ footer{
       <!-- Risk table top items -->
       <div class="card">
         <div class="ch"><div class="ct">ROT High Risk Items</div><div class="cs">Item dengan probabilitas rendah atau status kritis</div></div>
-        <div style="display:flex;flex-direction:column;gap:8px">
+        <div id="ai-rot-high-risk-list" style="display:flex;flex-direction:column;gap:8px">
           <div style="background:rgba(229,57,53,.07);border:1px solid rgba(229,57,53,.25);border-radius:10px;padding:10px 14px">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
               <span style="font-weight:700;font-size:13px">GITET Gandul — ABK (Lain-lain)</span>
@@ -2726,7 +2726,7 @@ footer{
   <!-- === RISK B: ANOMALI === -->
   <div style="background:rgba(255,143,0,.05);border:1px solid rgba(255,143,0,.2);border-radius:12px;padding:16px 20px;margin-bottom:16px">
     <div style="font-size:14px;font-weight:700;color:var(--O);margin-bottom:12px">⚠ Analisa Risiko Anomali 2024</div>
-    <div class="alrt ay">🧮 <strong>Skoring risiko anomali:</strong> Skor = Kategori (MAJOR=3, MINOR=1) + Pengerjaan (PADAM=3, TDP=1) + Prioritas (URGENT=4, MOD=1) + Status (NOT YET=3, PENGAJUAN=2, DONE=0). KRITIS≥11 · TINGGI 8-10 · SEDANG 5-7</div>
+    <div class="alrt ay" id="ai-anom-risk-formula">🧮 <strong>Skoring risiko anomali:</strong> Skor = Kategori (MAJOR=3, MINOR=1) + Pengerjaan (PADAM=3, TDP=1) + Prioritas (URGENT=4, MOD=1) + Status (NOT YET=3, PENGAJUAN=2, DONE=0). KRITIS≥11 · TINGGI 8-10 · SEDANG 5-7</div>
     <div class="g2">
       <!-- Risk heatmap GI -->
       <div class="card">
@@ -2740,7 +2740,7 @@ footer{
               <th class="r">Total</th><th class="r">Backlog K+T</th>
             </tr></thead>
             <tbody>
-              <tr><td><span class="bay-name">GITET 500KV GANDUL</span></td><td class="r"><strong style="color:#E53935;font-family:&#39;JetBrains Mono&#39;,monospace">—</strong></td><td class="r" style="color:#FF8F00;font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:700">39</td><td class="r" style="color:#FFD600;font-family:&#39;JetBrains Mono&#39;,monospace">59</td><td class="r" style="font-family:&#39;JetBrains Mono&#39;,monospace">104</td><td class="r"><span class="pill p-res">34 item</span></td></tr>
+              <tbody id="ai-anom-matrix-tbody"><tr><td><span class="bay-name">GITET 500KV GANDUL</span></td><td class="r"><strong style="color:#E53935;font-family:&#39;JetBrains Mono&#39;,monospace">—</strong></td><td class="r" style="color:#FF8F00;font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:700">39</td><td class="r" style="color:#FFD600;font-family:&#39;JetBrains Mono&#39;,monospace">59</td><td class="r" style="font-family:&#39;JetBrains Mono&#39;,monospace">104</td><td class="r"><span class="pill p-res">34 item</span></td></tr>
               <tr><td><span class="bay-name">GITET 500KV DEPOK</span></td><td class="r"><strong style="color:#E53935;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:14px">5</strong></td><td class="r" style="color:#FF8F00;font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:700">21</td><td class="r" style="color:#FFD600;font-family:&#39;JetBrains Mono&#39;,monospace">31</td><td class="r" style="font-family:&#39;JetBrains Mono&#39;,monospace">73</td><td class="r"><span class="pill p-abk">19 item</span></td></tr>
               <tr><td><span class="bay-name">GI 150KV GANDUL</span></td><td class="r"><strong style="color:#E53935;font-family:&#39;JetBrains Mono&#39;,monospace">—</strong></td><td class="r" style="color:#FF8F00;font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:700">13</td><td class="r" style="color:#FFD600;font-family:&#39;JetBrains Mono&#39;,monospace">41</td><td class="r" style="font-family:&#39;JetBrains Mono&#39;,monospace">69</td><td class="r"><span class="pill p-res">12 item</span></td></tr>
               <tr><td><span class="bay-name">GI 150KV DEPOK</span></td><td class="r"><strong style="color:#E53935;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:14px">3</strong></td><td class="r" style="color:#FF8F00;font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:700">12</td><td class="r" style="color:#FFD600;font-family:&#39;JetBrains Mono&#39;,monospace">24</td><td class="r" style="font-family:&#39;JetBrains Mono&#39;,monospace">40</td><td class="r"><span class="pill p-abk">12 item</span></td></tr>
@@ -2754,7 +2754,7 @@ footer{
       <!-- Top kritis table -->
       <div class="card">
         <div class="ch"><div class="ct">Top 9 Anomali KRITIS (Skor ≥11)</div><div class="cs">Prioritas penanganan segera</div></div>
-        <div style="display:flex;flex-direction:column;gap:7px">
+        <div id="ai-anom-kritis-list" style="display:flex;flex-direction:column;gap:7px">
           <div style="background:rgba(229,57,53,.08);border-radius:8px;padding:9px 12px"><div style="font-size:12.5px;font-weight:600;color:var(--T)">GI 150KV DEPOK — DIAMETER 150KV</div><div style="font-size:11px;color:var(--M);margin-top:2px">PADAM · URGENT · NOT YET · <strong style="color:#E53935">Skor: 13</strong></div></div>
           <div style="background:rgba(229,57,53,.08);border-radius:8px;padding:9px 12px"><div style="font-size:12.5px;font-weight:600;color:var(--T)">GITET DEPOK — Konverter MUX NR</div><div style="font-size:11px;color:var(--M);margin-top:2px">PADAM · URGENT · NOT YET · <strong style="color:#E53935">Skor: 13</strong></div></div>
           <div style="background:rgba(229,57,53,.08);border-radius:8px;padding:9px 12px"><div style="font-size:12.5px;font-weight:600;color:var(--T)">GITET DEPOK — Relay F50BF+SZP (×2)</div><div style="font-size:11px;color:var(--M);margin-top:2px">PADAM · URGENT · NOT YET · <strong style="color:#E53935">Skor: 13</strong></div></div>
@@ -4334,43 +4334,36 @@ function rebuildANOMData(rows) {
 
 // ── APPLY ML ANALYSIS DATA ──────────────────────────────────
 function applyMLData(ml) {
-  const setBadge = (txt, color) => {
-    const s = document.getElementById('ai-status');
-    if (s) { s.textContent = txt; s.style.color = color||'var(--M)'; }
-  };
-  if (!ml) { setBadge('— data statis', 'var(--M)'); return; }
+  const setEl = (id, html) => { const e=document.getElementById(id); if(e&&html!==undefined) e.innerHTML=html; };
+  const setText = (id, txt) => { const e=document.getElementById(id); if(e&&txt!==undefined) e.textContent=txt; };
+  const setBadge = (txt, color) => { setEl('ai-status', txt); const s=document.getElementById('ai-status'); if(s) s.style.color=color||'var(--M)'; };
 
-  // 1. Apply prob per item
+  if (!ml) { setBadge('— data statis','var(--M)'); return; }
+
+  // ── 1. Prob scores per ROT item ──
   if (ml.probScores && ml.probScores.length > 0) {
     const probMap = {};
     ml.probScores.forEach(p => { probMap[p.no] = p.prob; });
     ROT.forEach(r => {
-      if (probMap[r.no] !== undefined) {
-        r.prob = probMap[r.no];
-      } else {
+      if (probMap[r.no] !== undefined) r.prob = probMap[r.no];
+      else {
         const st = (r.status||'').toLowerCase();
-        const hasAnom = (r.anom||'').includes('ANOMALI');
+        const ha = (r.anom||'').includes('ANOMALI');
         if (st.includes('accomplished')) r.prob = 1.0;
-        else if (st.includes('efisiensi'))    r.prob = 0.5;
-        else if (st.includes('abk'))          r.prob = 0.15;
-        else if (st.includes('re-sched'))     r.prob = 0.25;
-        else if (st.includes('idle'))         r.prob = hasAnom ? 0.72 : 0.38;
-        else if (st.includes('scheduled'))    r.prob = hasAnom ? 0.87 : 0.76;
+        else if (st.includes('efisiensi'))  r.prob = 0.5;
+        else if (st.includes('abk'))        r.prob = 0.15;
+        else if (st.includes('re-sched'))   r.prob = 0.25;
+        else if (st.includes('idle'))       r.prob = ha ? 0.72 : 0.38;
+        else if (st.includes('scheduled'))  r.prob = ha ? 0.87 : 0.76;
         else r.prob = 0.5;
       }
     });
   }
 
-  // 2. Narasi rekomendasi
+  // ── 2. Narasi ringkasan (tab Resume) ──
   if (ml.narasi) {
     const n = ml.narasi;
-    if (n.rekomendasi) {
-      n.rekomendasi.slice(0,4).forEach((rek, i) => {
-        const el = document.getElementById('ai-rec-'+(i+1));
-        if (el) el.innerHTML = rek;
-      });
-    }
-    const setEl = (id, txt) => { const e=document.getElementById(id); if(e&&txt) e.innerHTML=txt; };
+    if (n.rekomendasi) n.rekomendasi.slice(0,4).forEach((r,i) => setEl('ai-rec-'+(i+1), r));
     setEl('ai-ringkasan', n.ringkasan);
     setEl('ai-prediksi', n.prediksi);
     setEl('ai-kritis', n.temuan_kritis);
@@ -4379,22 +4372,98 @@ function applyMLData(ml) {
     if (blk) blk.style.display = 'block';
   }
 
-  // 3. Stats
+  // ── 3. Stats (kartu high risk) ──
   if (ml.stats) {
     const hrc = ml.stats.high_risk_count || 0;
-    const e1 = document.getElementById('ai-high-risk-count');
-    const e2 = document.getElementById('high-risk-label');
-    if (e1) e1.textContent = hrc;
-    if (e2) e2.textContent = hrc;
+    setText('ai-high-risk-count', hrc);
+    setText('high-risk-label', hrc);
   }
 
-  // 4. Badge
+  // ── 4. Analisa Progres Penyelesaian Anomali ──
+  if (ml.analisa_progres) {
+    const ap = ml.analisa_progres;
+    setText('ai-speed-2024', ap.speed_2024 || '—');
+    setText('ai-speed-2025', ap.speed_2025 || '—');
+    setText('ai-speed-2026', ap.speed_2026 || '—');
+    setEl('ai-tren-narasi', ap.tren_narasi || '');
+    setText('ai-backlog-sisa', ap.backlog_sisa || '—');
+    setText('ai-speed-current', (ap.speed_current || '—') + ' item/bln');
+    setText('ai-estimasi-clear', ap.estimasi_clear || '—');
+
+    if (ap.bottleneck && ap.bottleneck.length > 0) {
+      const bnList = document.getElementById('ai-bottleneck-list');
+      if (bnList) {
+        bnList.innerHTML = ap.bottleneck.map((b,i) => `
+          <div style="padding:10px 12px;background:${b.bg||'rgba(0,113,197,.07)'};border-radius:8px">
+            <div style="font-size:11px;font-weight:700;color:${b.warna_judul||'var(--A)'};margin-bottom:4px">${b.judul}</div>
+            <div style="font-size:12.5px;color:var(--M)">${b.deskripsi}</div>
+          </div>`).join('');
+      }
+    }
+  }
+
+  // ── 5. Analisa Risiko ROT ──
+  if (ml.analisa_risiko_rot) {
+    const ar = ml.analisa_risiko_rot;
+    setEl('ai-rot-risk-alert', ar.alert || '');
+
+    if (ar.high_risk_items && ar.high_risk_items.length > 0) {
+      const hrList = document.getElementById('ai-rot-high-risk-list');
+      if (hrList) {
+        hrList.innerHTML = ar.high_risk_items.map(item => `
+          <div style="background:${item.bg||'rgba(229,57,53,.07)'};border:1px solid ${item.border||'rgba(229,57,53,.25)'};border-radius:10px;padding:10px 14px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+              <span style="font-weight:700;font-size:13px">${item.judul}</span>
+              <span class="pill ${item.pill_class||'p-abk'}">P = ${item.prob_pct}%</span>
+            </div>
+            <div style="font-size:11.5px;color:var(--M)">${item.detail}</div>
+          </div>`).join('');
+      }
+    }
+  }
+
+  // ── 6. Analisa Risiko Anomali ──
+  if (ml.analisa_risiko_anomali) {
+    const aa = ml.analisa_risiko_anomali;
+
+    // Matrix per GI
+    if (aa.matrix && aa.matrix.length > 0) {
+      const tbody = document.getElementById('ai-anom-matrix-tbody');
+      if (tbody) {
+        tbody.innerHTML = aa.matrix.map(r => `
+          <tr>
+            <td><span class="bay-name">${r.gi}</span></td>
+            <td class="r"><strong style="color:#E53935;font-family:'JetBrains Mono',monospace;font-size:${r.kritis>0?'14px':'12px'}">${r.kritis||'—'}</strong></td>
+            <td class="r" style="color:#FF8F00;font-family:'JetBrains Mono',monospace;font-weight:700">${r.tinggi||'—'}</td>
+            <td class="r" style="color:#FFD600;font-family:'JetBrains Mono',monospace">${r.sedang||'—'}</td>
+            <td class="r" style="font-family:'JetBrains Mono',monospace">${r.total||0}</td>
+            <td class="r"><span class="pill ${r.pill_class||'p-res'}">${r.backlog} item</span></td>
+          </tr>`).join('');
+      }
+    }
+
+    // Top kritis list
+    if (aa.top_kritis && aa.top_kritis.length > 0) {
+      const kritisList = document.getElementById('ai-anom-kritis-list');
+      if (kritisList) {
+        kritisList.innerHTML = aa.top_kritis.map(item => `
+          <div style="background:${item.bg||'rgba(229,57,53,.08)'};border-radius:8px;padding:9px 12px">
+            <div style="font-size:12.5px;font-weight:600;color:var(--T)">${item.judul}</div>
+            <div style="font-size:11px;color:var(--M);margin-top:2px">${item.detail} · <strong style="color:${item.warna_skor||'#E53935'}">Skor: ${item.skor}</strong></div>
+          </div>`).join('');
+      }
+    }
+  }
+
+  // ── 7. Badge AI status ──
   setBadge('✓ AI analysed', '#00C07B');
 
-  // 5. Re-render prob charts
+  // ── 8. Re-render prob charts & tabel ──
   [drawProbHistogram, drawProbCumul, buildDetailTable].forEach(fn => {
     try { if (typeof fn==='function') fn(); } catch(e) {}
   });
+
+  console.log('[ULTG ML] ML analysis applied successfully');
 }
 
 // ─── LIVE DATA FROM GOOGLE SHEETS ────────────────────────────
