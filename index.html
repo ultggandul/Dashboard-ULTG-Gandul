@@ -248,6 +248,13 @@ footer{
 </style>
 <script src="./Dashboard ULTG Gandul — PLN UIT JBB UPDATE_files/xlsx.full.min.js"></script></head>
 <body>
+<!-- ── LIVE DATA LOADING OVERLAY ── -->
+<div id="live-overlay" style="position:fixed;inset:0;background:rgba(7,15,32,.82);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .4s">
+  <div style="width:48px;height:48px;border:3px solid rgba(0,113,197,.3);border-top-color:#0071C5;border-radius:50%;animation:spin .8s linear infinite"></div>
+  <div style="font-family:'Poppins',sans-serif;font-size:15px;color:#E8F0FB;font-weight:600">Memuat data live dari Spreadsheet...</div>
+  <div style="font-size:12px;color:#7A94BB">Menghubungi Google Sheets API</div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 <div class="pg">
 
 <!-- ══════════ HEADER ══════════ -->
@@ -304,19 +311,19 @@ footer{
     <div class="kc" style="--kc:var(--Y)"><div class="kl">Efisiensi (→2028)</div><div class="kv yy" id="kv-rot-efi" style="opacity:.7">33</div><div class="ku">ditunda ke 2028</div></div>
     <div class="kc" style="--kc:var(--R)"><div class="kl">IDLE</div><div class="kv rr" id="kv-rot-idle1">11</div><div class="ku" id="ku-rot-idle1">belum terjadwal</div></div>
     <div class="kc" style="--kc:var(--P)"><div class="kl">Scheduled</div><div class="kv pp" id="kv-rot-sch1">7</div><div class="ku">terjadwal menunggu</div></div>
-    <div class="kc" style="--kc:var(--R)"><div class="kl">Re-Sched / ABK</div><div class="kv rr">2</div><div class="ku">risiko tidak jadi</div></div>
+    <div class="kc" style="--kc:var(--R)"><div class="kl">Re-Sched / ABK</div><div class="kv rr" id="kv-rot-resabk">2</div><div class="ku">risiko tidak jadi</div></div>
     <div class="kc" style="--kc:var(--O)"><div class="kl">Ada Anomali</div><div class="kv oo" id="kv-rot-anom">30</div><div class="ku">bay bermasalah</div></div>
   </div>
 
   <!-- PART 2: ROT AKTIF 2026 (minus Efisiensi = 36 item) -->
-  <div class="sec" style="margin-top:0"><div class="sd" style="background:var(--G)"></div><div class="sl" style="font-size:14px">Part 2 — Progres Aktual ROT 2026 (minus Efisiensi → 69 − 33 = <span style="color:var(--G)">36 item aktif</span>)</div><div class="sr"></div></div>
+  <div class="sec" style="margin-top:0"><div class="sd" style="background:var(--G)"></div><div class="sl" style="font-size:14px">Part 2 — Progres Aktual ROT 2026 (minus Efisiensi → <span id="p2-total">69</span> − <span id="p2-efi">33</span> = <span style="color:var(--G)" id="p2-aktif">36</span> item aktif)</div><div class="sr"></div></div>
   <div class="krow" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr));margin-bottom:16px">
     <div class="kc" style="--kc:var(--A)"><div class="kl">Target Aktif 2026</div><div class="kv aa" id="kv-rot-aktif">36</div><div class="ku">item yang dinilai 2026</div></div>
     <div class="kc" style="--kc:var(--G)"><div class="kl">Accomplished</div><div class="kv gg" id="kv-rot-acc2">17</div><div class="ku" id="ku-rot-acc-pct" style="color:var(--G);font-weight:700">47.2% selesai</div></div>
     <div class="kc" style="--kc:var(--R)"><div class="kl">IDLE</div><div class="kv rr" id="kv-rot-idle2">11</div><div class="ku" id="ku-rot-idle-pct">30.6% belum jalan</div></div>
-    <div class="kc" style="--kc:var(--P)"><div class="kl">Scheduled</div><div class="kv pp">7</div><div class="ku">19.4% akan jalan</div></div>
-    <div class="kc" style="--kc:var(--O)"><div class="kl">Re-Scheduled</div><div class="kv oo">0</div><div class="ku">0% diulang</div></div>
-    <div class="kc" style="--kc:var(--R)"><div class="kl">ABK</div><div class="kv rr">1</div><div class="ku">2.8% risiko batal</div></div>
+    <div class="kc" style="--kc:var(--P)"><div class="kl">Scheduled</div><div class="kv pp" id="kv-rot-sch2">7</div><div class="ku" id="ku-rot-sch-pct">19.4% akan jalan</div></div>
+    <div class="kc" style="--kc:var(--O)"><div class="kl">Re-Scheduled</div><div class="kv oo" id="kv-rot-res2">0</div><div class="ku" id="ku-rot-res-pct">0% diulang</div></div>
+    <div class="kc" style="--kc:var(--R)"><div class="kl">ABK</div><div class="kv rr" id="kv-rot-abk2">1</div><div class="ku" id="ku-rot-abk-pct">2.8% risiko batal</div></div>
   </div>
 
   <!-- PROGRESS BAR PENYELESAIAN ROT 2026 AKTIF -->
@@ -325,24 +332,24 @@ footer{
       <div><div class="ct">Progress Penyelesaian ROT 2026</div><div class="cs">Dihitung dari 36 item aktif (tidak termasuk 33 Efisiensi →2028)</div></div>
       <div class="ck cg" id="rot-pct-badge">47.2% Accomplished</div>
     </div>
-    <!-- Segmented progress bar -->
-    <div style="display:flex;height:28px;border-radius:10px;overflow:hidden;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.3)">
-      <div style="width:47.2%;background:linear-gradient(90deg,#00C07B,#00E89A);display:flex;align-items:center;justify-content:center;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:11px;font-weight:700;color:#003322;white-space:nowrap">✓ 17</div>
-      <div style="width:19.4%;background:linear-gradient(90deg,#7C4DFF,#A78BFA);display:flex;align-items:center;justify-content:center;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:10px;font-weight:700;color:white">7</div>
-      <div style="width:2.8%;background:linear-gradient(90deg,#FF8F00,#FFB347);"></div>
-      <div style="width:2.8%;background:linear-gradient(90deg,#E53935,#F87171);"></div>
-      <div style="flex:1;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:11px;color:rgba(255,255,255,.35)">IDLE 11</div>
+    <!-- Segmented progress bar — updated live via updateProgressBar() -->
+    <div id="prog-bar-wrap" style="display:flex;height:28px;border-radius:10px;overflow:hidden;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.3)">
+      <div id="pbar-acc" style="width:47.2%;background:linear-gradient(90deg,#00C07B,#00E89A);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:#003322;white-space:nowrap">✓ 17</div>
+      <div id="pbar-sch" style="width:19.4%;background:linear-gradient(90deg,#7C4DFF,#A78BFA);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:white">7</div>
+      <div id="pbar-res" style="width:2.8%;background:linear-gradient(90deg,#FF8F00,#FFB347);"></div>
+      <div id="pbar-abk" style="width:2.8%;background:linear-gradient(90deg,#E53935,#F87171);"></div>
+      <div id="pbar-idle" style="flex:1;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.35)">IDLE 11</div>
     </div>
     <!-- Legend -->
     <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:12px">
-      <div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:12px;border-radius:3px;background:#00C07B"></div><span>Accomplished <strong style="font-family:&#39;JetBrains Mono&#39;,monospace;color:#00C07B">17 (47.2%)</strong></span></div>
-      <div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:12px;border-radius:3px;background:#7C4DFF"></div><span>Scheduled <strong style="font-family:&#39;JetBrains Mono&#39;,monospace;color:#A78BFA">7 (19.4%)</strong></span></div>
-      <div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:12px;border-radius:3px;background:#FF8F00"></div><span>Re-Scheduled <strong style="font-family:&#39;JetBrains Mono&#39;,monospace;color:#FF8F00">0 (0%)</strong></span></div>
-      <div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:12px;border-radius:3px;background:#E53935"></div><span>ABK <strong style="font-family:&#39;JetBrains Mono&#39;,monospace;color:#F87171">1 (2.8%)</strong></span></div>
-      <div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:12px;border-radius:3px;background:rgba(255,255,255,.1)"></div><span>IDLE <strong style="font-family:&#39;JetBrains Mono&#39;,monospace;color:var(--R)">11 (30.6%)</strong></span></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:12px;border-radius:3px;background:#00C07B"></div><span>Accomplished <strong id="leg-acc" style="font-family:'JetBrains Mono',monospace;color:#00C07B">17 (47.2%)</strong></span></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:12px;border-radius:3px;background:#7C4DFF"></div><span>Scheduled <strong id="leg-sch" style="font-family:'JetBrains Mono',monospace;color:#A78BFA">7 (19.4%)</strong></span></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:12px;border-radius:3px;background:#FF8F00"></div><span>Re-Scheduled <strong id="leg-res" style="font-family:'JetBrains Mono',monospace;color:#FF8F00">0 (0%)</strong></span></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:12px;border-radius:3px;background:#E53935"></div><span>ABK <strong id="leg-abk" style="font-family:'JetBrains Mono',monospace;color:#F87171">1 (2.8%)</strong></span></div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:12px;border-radius:3px;background:rgba(255,255,255,.1)"></div><span>IDLE <strong id="leg-idle" style="font-family:'JetBrains Mono',monospace;color:var(--R)">11 (30.6%)</strong></span></div>
     </div>
-    <div style="margin-top:12px;background:rgba(0,113,197,.08);border-radius:8px;padding:9px 14px;font-size:12.5px;color:var(--M)">
-      📌 <strong style="color:var(--Y)">Catatan Efisiensi:</strong> 33 item Efisiensi (47.8% dari total 69) <strong style="color:var(--Y)">tidak masuk perhitungan progres 2026</strong> — dijadwalkan ulang ke ROT 2028.
+    <div id="efisiensi-note" style="margin-top:12px;background:rgba(0,113,197,.08);border-radius:8px;padding:9px 14px;font-size:12.5px;color:var(--M)">
+      📌 <strong style="color:var(--Y)">Catatan Efisiensi:</strong> <span id="efisiensi-count">33</span> item Efisiensi (<span id="efisiensi-pct">47.8</span>% dari total <span id="efisiensi-total">69</span>) <strong style="color:var(--Y)">tidak masuk perhitungan progres 2026</strong> — dijadwalkan ulang ke ROT 2028.
     </div>
   </div>
 
@@ -4488,6 +4495,9 @@ async function fetchLiveData() {
     applyLiveData(data);
     setBadge('✅ Live · ' + (data.updated || ''), '#00C07B');
     console.log('[ULTG Live] OK via fetch():', data.updated);
+    // Dismiss loading overlay
+    const ov = document.getElementById('live-overlay');
+    if (ov) { ov.style.opacity = '0'; setTimeout(() => ov.remove(), 500); }
     return;
   } catch(e1) {
     console.warn('[ULTG Live] fetch() gagal, coba JSONP:', e1.message);
@@ -4514,6 +4524,9 @@ async function fetchLiveData() {
         applyLiveData(data);
         setBadge('✅ Live · ' + (data.updated || ''), '#00C07B');
         console.log('[ULTG Live] OK via JSONP:', data.updated);
+        // Dismiss loading overlay
+        const ov2 = document.getElementById('live-overlay');
+        if (ov2) { ov2.style.opacity = '0'; setTimeout(() => ov2.remove(), 500); }
         resolve();
       };
 
@@ -4527,7 +4540,72 @@ async function fetchLiveData() {
   } catch(e2) {
     console.warn('[ULTG Live] JSONP gagal:', e2.message);
     setBadge('⚠ Gagal · data statis', '#FF8F00');
+    // Dismiss overlay on failure
+    const ovFail = document.getElementById('live-overlay');
+    if (ovFail) { ovFail.style.opacity = '0'; setTimeout(() => ovFail.remove(), 500); }
   }
+}
+
+// ── UPDATE PROGRESS BAR (segmented bar + legend + notes) ─────────
+function updateProgressBar(rot) {
+  if (!rot) return;
+  const aktif = rot.aktif || (rot.total - rot.efi);
+  if (aktif <= 0) return;
+  const pct = v => aktif > 0 ? Math.round(v / aktif * 1000) / 10 : 0;
+  const pctAcc  = pct(rot.acc);
+  const pctSch  = pct(rot.sch);
+  const pctRes  = pct(rot.res);
+  const pctAbk  = pct(rot.abk);
+
+  const setW = (id, w, label) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.width = w + '%';
+    if (label !== undefined) el.textContent = label;
+  };
+
+  setW('pbar-acc', pctAcc,  pctAcc > 5 ? '✓ ' + rot.acc : '');
+  setW('pbar-sch', pctSch,  pctSch > 5 ? rot.sch : '');
+  setW('pbar-res', pctRes,  undefined);
+  setW('pbar-abk', pctAbk,  undefined);
+  const idleEl = document.getElementById('pbar-idle');
+  if (idleEl) idleEl.textContent = 'IDLE ' + rot.idle;
+
+  const setLeg = (id, v, pv, color) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = v + ' (' + pv + '%)';
+  };
+  setLeg('leg-acc',  rot.acc,  pctAcc,  '#00C07B');
+  setLeg('leg-sch',  rot.sch,  pctSch,  '#A78BFA');
+  setLeg('leg-res',  rot.res,  pctRes,  '#FF8F00');
+  setLeg('leg-abk',  rot.abk,  pctAbk,  '#F87171');
+  const idlePct = pct(rot.idle);
+  setLeg('leg-idle', rot.idle, idlePct, 'var(--R)');
+
+  // Update Part 2 header span counts
+  const setT = (id, v) => { const e = document.getElementById(id); if(e) e.textContent = v; };
+  setT('p2-total', rot.total);
+  setT('p2-efi',   rot.efi);
+  setT('p2-aktif', aktif);
+
+  // Update Catatan Efisiensi note
+  setT('efisiensi-count', rot.efi);
+  setT('efisiensi-total', rot.total);
+  const efiPct = rot.total > 0 ? (rot.efi / rot.total * 100).toFixed(1) : 0;
+  setT('efisiensi-pct', efiPct);
+
+  // Update Part 2 card description subtitle
+  const cs = document.querySelector('#prog-bar-wrap')?.closest('.card')?.querySelector('.cs');
+  if (cs) cs.textContent = 'Dihitung dari ' + aktif + ' item aktif (tidak termasuk ' + rot.efi + ' Efisiensi →2028)';
+
+  // Update Part 2 KPI cards (Sch / Res / ABK)
+  setT('kv-rot-sch2',  rot.sch);
+  setT('kv-rot-res2',  rot.res);
+  setT('kv-rot-abk2',  rot.abk);
+  setT('kv-rot-resabk', (rot.res || 0) + (rot.abk || 0));
+  setT('ku-rot-sch-pct', pctSch + '% akan jalan');
+  setT('ku-rot-res-pct', pctRes + '% diulang');
+  setT('ku-rot-abk-pct', pctAbk + '% risiko batal');
 }
 
 function applyLiveData(data) {
@@ -4563,6 +4641,9 @@ function applyLiveData(data) {
   // ── Badge progress ROT ──
   const badge = document.getElementById('rot-pct-badge');
   if (badge) badge.textContent = rot.pctAcc + '% Accomplished';
+
+  // ── Update segmented progress bar + legend + notes ──
+  updateProgressBar(rot);
 
   // ── Update header badge jumlah ROT/Anomali ──
   document.querySelectorAll('.live-badge, [class*="live"]').forEach(el => {
