@@ -224,6 +224,36 @@ header::after{
   font-size:18px;flex-shrink:0;
 }
 
+/* ── ADVANCED FILTER CONTROLS ── */
+.flt-panel{background:var(--bg2);border:1px solid var(--LN);border-radius:14px;padding:14px 18px;margin-bottom:14px}
+.flt-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.flt-row:last-child{margin-bottom:0}
+.flt-select{
+  background:var(--bg3);border:1px solid var(--LN2);color:var(--T);
+  border-radius:8px;padding:7px 12px;font-family:'Poppins',sans-serif;font-size:12px;
+  cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237A94BB'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;
+  min-width:130px;
+}
+.flt-select:focus{border-color:var(--A);outline:none}
+.flt-select option{background:var(--bg2)}
+.flt-input{
+  background:var(--bg3);border:1px solid var(--LN2);color:var(--T);
+  border-radius:8px;padding:7px 14px;font-family:'Poppins',sans-serif;font-size:12px;
+  outline:none;flex:1;min-width:180px;max-width:360px;
+}
+.flt-input::placeholder{color:var(--M)}
+.flt-input:focus{border-color:var(--A)}
+.flt-reset{
+  background:rgba(229,57,53,.1);border:1px solid rgba(229,57,53,.3);color:#F87171;
+  border-radius:8px;padding:7px 14px;font-family:'Poppins',sans-serif;font-size:12px;cursor:pointer;
+  white-space:nowrap;
+}
+.flt-reset:hover{background:rgba(229,57,53,.2)}
+.flt-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--M);margin-left:auto;white-space:nowrap}
+.flt-count strong{color:var(--A)}
+
 /* ── FOOTER ── */
 footer{
   margin-top:32px;padding:16px 0 10px;border-top:1px solid var(--LN);
@@ -724,12 +754,49 @@ footer{
 <div id="tab-detail" class="panel">
   <div class="sec"><div class="sd" style="background:var(--C)"></div><div class="sl">Detail <span id="det-total">69</span> Item ROT 2026</div><div class="sr"></div></div>
 
-  <div class="filter-bar">
+  <!-- Quick filter pills -->
+  <div class="filter-bar" style="margin-bottom:10px">
     <button class="tbtn on" onclick="filterDetail(&#39;all&#39;,this)">Semua (<span id="flt-all">69</span>)</button>
     <button class="tbtn" id="btn-high-risk" onclick="filterDetail(&#39;high&#39;,this)">🔴 High Risk (<span id="high-risk-label">3</span>)</button>
     <button class="tbtn" onclick="filterDetail(&#39;idle&#39;,this)">🟡 IDLE (<span id="flt-idle">19</span>)</button>
     <button class="tbtn" onclick="filterDetail(&#39;anom&#39;,this)">⚠ Ada Anomali (<span id="flt-anom">30</span>)</button>
     <button class="tbtn" onclick="filterDetail(&#39;acc&#39;,this)">✅ Accomplished (<span id="flt-acc">17</span>)</button>
+  </div>
+
+  <!-- Advanced filter panel ROT -->
+  <div class="flt-panel">
+    <div class="flt-row">
+      <input class="flt-input" id="rot-search" type="text" placeholder="🔍 Cari uraian pekerjaan, nama GI..." oninput="applyROTFilters()">
+      <span class="flt-count" id="rot-count-badge"><strong id="rot-filtered-count">69</strong> / <span id="rot-total-count">69</span> item</span>
+    </div>
+    <div class="flt-row">
+      <select class="flt-select" id="rot-f-lokasi" onchange="applyROTFilters()">
+        <option value="">🏭 Semua GI/GITET</option>
+      </select>
+      <select class="flt-select" id="rot-f-status" onchange="applyROTFilters()">
+        <option value="">📋 Semua Realisasi</option>
+        <option>Accomplished</option>
+        <option>EFISIENSI</option>
+        <option>IDLE</option>
+        <option>Scheduled</option>
+        <option>Re-Scheduled</option>
+        <option>ABK</option>
+      </select>
+      <select class="flt-select" id="rot-f-kat" onchange="applyROTFilters()">
+        <option value="">⚙ Semua Kategori Bay</option>
+      </select>
+      <select class="flt-select" id="rot-f-hari" onchange="applyROTFilters()">
+        <option value="">📅 Semua Hari</option>
+        <option>WEEKDAY</option>
+        <option>WEEKEND</option>
+      </select>
+      <select class="flt-select" id="rot-f-anom" onchange="applyROTFilters()">
+        <option value="">⚠ Semua Status Anomali</option>
+        <option value="ada">⚠ Ada Anomali</option>
+        <option value="aman">✅ Aman</option>
+      </select>
+      <button class="flt-reset" onclick="resetROTFilters()">↺ Reset</button>
+    </div>
   </div>
 
   <div class="card">
@@ -1965,6 +2032,73 @@ footer{
 
 </div>
 
+
+  <!-- ── FULL ANOMALI TABLE with FILTERS ────────────────────── -->
+  <div class="sec" style="margin-top:24px">
+    <div class="sd" style="background:var(--O)"></div>
+    <div class="sl">Tabel Lengkap Anomali — Filter Interaktif</div>
+    <div class="sr"></div>
+  </div>
+
+  <div class="flt-panel">
+    <div class="flt-row">
+      <input class="flt-input" id="anom-search" type="text" placeholder="🔍 Cari deskripsi, nama alat, bay..." oninput="applyAnomFilters()">
+      <span class="flt-count" id="anom-count-badge"><strong id="anom-filtered-count">—</strong> / <span id="anom-total-count">—</span> anomali</span>
+    </div>
+    <div class="flt-row">
+      <select class="flt-select" id="anom-f-gi" onchange="applyAnomFilters()">
+        <option value="">🏭 Semua GI/GITET</option>
+      </select>
+      <select class="flt-select" id="anom-f-status" onchange="applyAnomFilters()">
+        <option value="">📋 Semua Status</option>
+        <option>DONE</option>
+        <option>NOT YET</option>
+        <option>PENGAJUAN UPT</option>
+      </select>
+      <select class="flt-select" id="anom-f-bidang" onchange="applyAnomFilters()">
+        <option value="">🔧 Semua Bidang</option>
+      </select>
+      <select class="flt-select" id="anom-f-kat" onchange="applyAnomFilters()">
+        <option value="">⚡ Semua Kategori</option>
+        <option>MAJOR</option>
+        <option>MINOR</option>
+      </select>
+      <select class="flt-select" id="anom-f-pengerjaan" onchange="applyAnomFilters()">
+        <option value="">🔌 Semua Pengerjaan</option>
+        <option>PADAM</option>
+        <option>TDP</option>
+      </select>
+      <select class="flt-select" id="anom-f-klasifikasi" onchange="applyAnomFilters()">
+        <option value="">📂 Semua Titik Anomali</option>
+      </select>
+      <button class="flt-reset" onclick="resetAnomFilters()">↺ Reset</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="scroll" style="max-height:520px">
+      <table class="tbl" id="full-anom-table">
+        <thead><tr>
+          <th style="width:30px">#</th>
+          <th>GI/Lokasi</th>
+          <th>Nama Alat / Deskripsi</th>
+          <th>Bay</th>
+          <th class="r">Bidang</th>
+          <th class="r">Kategori</th>
+          <th class="r">Pengerjaan</th>
+          <th class="r">Titik Anomali</th>
+          <th class="r">Status</th>
+          <th class="r">Tgl Lapor</th>
+        </tr></thead>
+        <tbody id="full-anom-tbody">
+          <tr><td colspan="10" style="text-align:center;color:var(--M);padding:24px">Memuat data anomali...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
 <!-- ══════════════════════════════════════════════════════════
      TAB 4: MONITORING ALAT UJI
 ══════════════════════════════════════════════════════════ -->
@@ -3024,6 +3158,9 @@ const ALAT = [
 
 
 
+// ─── ANOMALI RAW ROWS (for full table + filters) ─────────
+let ANOM_ROWS = [];
+
 // ─── ANOMALI GI DATA ──────────────────────────────────────
 let ANOM_GI = [
   {gi:'GITET 500KV GANDUL',  total:105, done:53, notyet:47, pengajuan:5,  padam:56, padamBack:29},
@@ -3088,9 +3225,12 @@ function rebuildROTChartData() {
     else katMap[kat].other++;
   });
 
-  // Rebuild STACK_BY_MO (sorted Jan-Des)
-  STACK_BY_MO.length = 0;
-  [1,2,3,4,5,6,7,8,9,10,11,12].forEach(m => { if (moMap[m]) STACK_BY_MO.push(moMap[m]); });
+  // Rebuild STACK_BY_MO (only if tgl data exists in ROT rows)
+  const hasTgl = ROT.some(r => r.tgl && r.tgl.length >= 7);
+  if (hasTgl) {
+    STACK_BY_MO.length = 0;
+    [1,2,3,4,5,6,7,8,9,10,11,12].forEach(m => { if (moMap[m]) STACK_BY_MO.push(moMap[m]); });
+  }
 
   // Rebuild KAT_DATA (sorted by total desc)
   KAT_DATA.length = 0;
@@ -3211,7 +3351,15 @@ function drawStackBar() {
   const svg = el('stack-chart'); if (!svg) return;
   const W=480,H=200,PAD={t:15,b:40,l:30,r:10};
   const data = STACK_BY_MO;
-  const maxV = Math.max(...data.map(d=>d.acc+d.efi+d.idle+d.other));
+  if (!data || data.length === 0) {
+    svg.innerHTML = '<text x="240" y="105" text-anchor="middle" fill="#7A94BB" font-family="Poppins,sans-serif" font-size="13" opacity=".7">Data bulan belum tersedia — upload Excel atau pastikan Apps Script menyertakan kolom tanggal</text>';
+    return;
+  }
+  const maxV = Math.max(...data.map(d=>(d.acc||0)+(d.efi||0)+(d.idle||0)+(d.other||0)));
+  if (!isFinite(maxV) || maxV === 0) {
+    svg.innerHTML = '<text x="240" y="105" text-anchor="middle" fill="#7A94BB" font-family="Poppins,sans-serif" font-size="13" opacity=".7">Semua data bernilai 0</text>';
+    return;
+  }
   const bw = (W-PAD.l-PAD.r)/data.length - 4;
   const sc = y => PAD.t + (H-PAD.t-PAD.b) * (1 - y/maxV);
   svg.innerHTML = '';
@@ -3335,6 +3483,209 @@ function buildResumeTable() {
 }
 
 // ─── DETAIL TABLE ─────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════
+// ROT FULL TABLE — INTERACTIVE FILTERS
+// ══════════════════════════════════════════════════════════════
+
+function populateROTFilterOptions() {
+  const lokSet = new Set(), katSet = new Set();
+  ROT.forEach(r => {
+    if (r.lokasi) lokSet.add(r.lokasi);
+    if (r.kat)    katSet.add(r.kat);
+  });
+  const fillSel = (id, vals) => {
+    const sel = document.getElementById(id); if (!sel) return;
+    const cur = sel.value;
+    while (sel.options.length > 1) sel.remove(1);
+    [...vals].sort().forEach(v => {
+      const o = document.createElement('option'); o.value = v; o.textContent = v;
+      sel.appendChild(o);
+    });
+    sel.value = cur;
+  };
+  fillSel('rot-f-lokasi', lokSet);
+  fillSel('rot-f-kat',    katSet);
+  const setT = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+  setT('rot-total-count', ROT.length);
+  setT('rot-filtered-count', ROT.length);
+}
+
+function applyROTFilters() {
+  const search   = (document.getElementById('rot-search')?.value   || '').toLowerCase().trim();
+  const fStatus  = document.getElementById('rot-f-status')?.value  || '';
+  const fLokasi  = document.getElementById('rot-f-lokasi')?.value  || '';
+  const fKat     = document.getElementById('rot-f-kat')?.value     || '';
+  const fHari    = document.getElementById('rot-f-hari')?.value    || '';
+  const fAnom    = document.getElementById('rot-f-anom')?.value    || '';
+
+  const filtered = ROT.filter(r => {
+    if (fStatus && (r.status||'') !== fStatus)                              return false;
+    if (fLokasi && (r.lokasi||'') !== fLokasi)                              return false;
+    if (fKat    && (r.kat   ||'') !== fKat)                                  return false;
+    if (fHari   && (r.hari  ||'') !== fHari)                                 return false;
+    if (fAnom === 'ada'  && !(r.anom||'').includes('ADA'))                   return false;
+    if (fAnom === 'aman' &&  (r.anom||'').includes('ADA'))                   return false;
+    if (search) {
+      const hay = ((r.uraian||'')+(r.lokasi||'')+(r.kat||'')).toLowerCase();
+      if (!hay.includes(search)) return false;
+    }
+    return true;
+  });
+
+  buildDetailTableFiltered(filtered);
+  const setT = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+  setT('rot-filtered-count', filtered.length);
+  setT('rot-total-count',    ROT.length);
+}
+
+function resetROTFilters() {
+  ['rot-search'].forEach(id => { const e=document.getElementById(id); if(e) e.value=''; });
+  ['rot-f-status','rot-f-lokasi','rot-f-kat','rot-f-hari','rot-f-anom'].forEach(id => {
+    const e = document.getElementById(id); if(e) e.value = '';
+  });
+  applyROTFilters();
+}
+
+function buildDetailTableFiltered(items) {
+  const tbody = el('detail-tbody'); if (!tbody) return;
+  tbody.innerHTML = '';
+  if (!items || items.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--M);padding:24px">Tidak ada data yang sesuai filter</td></tr>';
+    return;
+  }
+  items.forEach(r => {
+    const colP = (r.prob !== undefined && !isNaN(r.prob)) ? (r.prob>=0.85?'var(--G)':r.prob>=0.6?'var(--Y)':'var(--R)') : 'var(--M)';
+    const st = (r.status||'').toLowerCase();
+    const statusClass = st.includes('accomplished')?'p-acc':st.includes('efisiensi')?'p-efi':st.includes('idle')?'p-idl':(st.includes('scheduled')&&!st.includes('re'))?'p-sch':st.includes('re')?'p-res':'p-abk';
+    const probTxt = (r.prob!==undefined&&!isNaN(r.prob)) ? Math.round(r.prob*100)+'%' : '—';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--M)">${r.no||'—'}</td>
+      <td><div class="bay-name" style="font-size:12px">${r.lokasi||'—'}</div></td>
+      <td><div class="bay-name" style="font-size:12.5px">${r.uraian||'—'}</div><div class="bay-sub">${r.bay||''}</div></td>
+      <td><span class="pill p-pln" style="font-size:10px">${r.kat||'—'}</span></td>
+      <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11.5px">${r.tgl||'—'}</td>
+      <td class="r"><span style="font-size:11px;color:var(--M)">${r.hari||'—'}</span></td>
+      <td class="r"><span class="pill ${statusClass}" style="font-size:10.5px">${r.status||'—'}</span></td>
+      <td class="r"><strong style="font-family:'JetBrains Mono',monospace;color:${colP};font-size:12px">${probTxt}</strong></td>
+      <td class="r">${(r.anom||'').includes('ADA')?'<span style="color:var(--O);font-size:12px">⚠ ADA</span>':'<span style="color:var(--G);font-size:12px">✅</span>'}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+// ANOMALI FULL TABLE — INTERACTIVE FILTERS
+// ══════════════════════════════════════════════════════════════
+
+function populateAnomFilterOptions() {
+  if (!ANOM_ROWS || !ANOM_ROWS.length) return;
+  const giSet = new Set(), bidSet = new Set(), klsSet = new Set();
+  ANOM_ROWS.forEach(r => {
+    if (r.lokasi)     giSet.add(r.lokasi);
+    if (r.bidang)     bidSet.add(r.bidang);
+    if (r.klasifikasi) klsSet.add(r.klasifikasi);
+  });
+  const fillSel = (id, vals) => {
+    const sel = document.getElementById(id); if (!sel) return;
+    const cur = sel.value;
+    while (sel.options.length > 1) sel.remove(1);
+    [...vals].sort().forEach(v => {
+      if (!v) return;
+      const o = document.createElement('option'); o.value = v; o.textContent = v;
+      sel.appendChild(o);
+    });
+    sel.value = cur;
+  };
+  fillSel('anom-f-gi',          giSet);
+  fillSel('anom-f-bidang',      bidSet);
+  fillSel('anom-f-klasifikasi', klsSet);
+  document.getElementById('anom-total-count')    && (document.getElementById('anom-total-count').textContent    = ANOM_ROWS.length);
+  document.getElementById('anom-filtered-count') && (document.getElementById('anom-filtered-count').textContent = ANOM_ROWS.length);
+}
+
+function applyAnomFilters() {
+  if (!ANOM_ROWS || !ANOM_ROWS.length) return;
+  const search   = (document.getElementById('anom-search')?.value        || '').toLowerCase().trim();
+  const fGI      = document.getElementById('anom-f-gi')?.value           || '';
+  const fStatus  = document.getElementById('anom-f-status')?.value       || '';
+  const fBidang  = document.getElementById('anom-f-bidang')?.value       || '';
+  const fKat     = document.getElementById('anom-f-kat')?.value          || '';
+  const fPeng    = document.getElementById('anom-f-pengerjaan')?.value   || '';
+  const fKls     = document.getElementById('anom-f-klasifikasi')?.value  || '';
+
+  const filtered = ANOM_ROWS.filter(r => {
+    if (fGI     && (r.lokasi    ||'') !== fGI)     return false;
+    if (fBidang && (r.bidang    ||'') !== fBidang)  return false;
+    if (fKat    && (r.kategori  ||'') !== fKat)     return false;
+    if (fPeng   && (r.pengerjaan||'') !== fPeng)    return false;
+    if (fKls    && (r.klasifikasi||'') !== fKls)    return false;
+    if (fStatus) {
+      const stLow = (r.status||'').toLowerCase();
+      const isDone = ['done','selesai','resolved'].some(s=>stLow.includes(s));
+      const isUpt  = ['pengajuan','upt'].some(s=>stLow.includes(s));
+      if (fStatus === 'DONE'           && !isDone)         return false;
+      if (fStatus === 'PENGAJUAN UPT'  && !isUpt)          return false;
+      if (fStatus === 'NOT YET'        && (isDone||isUpt))  return false;
+    }
+    if (search) {
+      const hay = ((r.deskripsi||'')+(r.namaAlat||'')+(r.bay||'')+(r.lokasi||'')+(r.klasifikasi||'')).toLowerCase();
+      if (!hay.includes(search)) return false;
+    }
+    return true;
+  });
+
+  buildFullAnomTable(filtered);
+  const setT = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+  setT('anom-filtered-count', filtered.length);
+  setT('anom-total-count',    ANOM_ROWS.length);
+}
+
+function resetAnomFilters() {
+  ['anom-search'].forEach(id => { const e=document.getElementById(id); if(e) e.value=''; });
+  ['anom-f-gi','anom-f-status','anom-f-bidang','anom-f-kat','anom-f-pengerjaan','anom-f-klasifikasi'].forEach(id => {
+    const e=document.getElementById(id); if(e) e.value='';
+  });
+  applyAnomFilters();
+}
+
+function buildFullAnomTable(rows) {
+  const tbody = document.getElementById('full-anom-tbody'); if (!tbody) return;
+  tbody.innerHTML = '';
+  if (!rows || rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--M);padding:24px">Tidak ada data yang sesuai filter</td></tr>';
+    return;
+  }
+  const STATUS_CLASS = (st) => {
+    const s = (st||'').toLowerCase();
+    if (['done','selesai','resolved'].some(x=>s.includes(x))) return 'p-acc';
+    if (['pengajuan','upt'].some(x=>s.includes(x)))           return 'p-sch';
+    return 'p-idl';
+  };
+  rows.forEach((r,i) => {
+    const sc = STATUS_CLASS(r.status);
+    const katCls = (r.kategori||'').toUpperCase().includes('MAJOR') ? 'co' : 'cy';
+    const padamBadge = (r.pengerjaan||'').toUpperCase().includes('PADAM')
+      ? '<span class="pill p-abk" style="font-size:10px">⚡ PADAM</span>'
+      : '<span class="pill p-efi" style="font-size:10px">TDP</span>';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--M)">${i+1}</td>
+      <td><div class="bay-name" style="font-size:12px">${r.lokasi||'—'}</div></td>
+      <td style="max-width:240px">
+        <div class="bay-name" style="font-size:12.5px;line-height:1.4">${r.namaAlat||r.deskripsi||'—'}</div>
+        <div class="bay-sub" style="font-size:11px">${(r.deskripsi||'').substring(0,60)+(r.deskripsi&&r.deskripsi.length>60?'...':'')}</div>
+      </td>
+      <td style="font-size:12px;color:var(--M)">${r.bay||'—'}</td>
+      <td class="r"><span class="ck ca" style="font-size:10px">${r.bidang||'—'}</span></td>
+      <td class="r"><span class="ck ${katCls}" style="font-size:10px">${r.kategori||'—'}</span></td>
+      <td class="r">${padamBadge}</td>
+      <td class="r" style="font-size:11px;color:var(--M);max-width:120px">${(r.klasifikasi||'—').substring(0,20)}</td>
+      <td class="r"><span class="pill ${sc}" style="font-size:10.5px">${r.status||'—'}</span></td>
+      <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--M)">${r.tgl||'—'}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
 let curFilter = 'all';
 function filterDetail(f, btn) {
   curFilter = f;
@@ -3345,11 +3696,16 @@ function filterDetail(f, btn) {
 function buildDetailTable() {
   const tbody = el('detail-tbody'); if(!tbody) return; tbody.innerHTML='';
   let items = ROT;
-  if(curFilter==='high') items=items.filter(r=>r.prob<0.55);
-  if(curFilter==='idle') items=items.filter(r=>r.status==='IDLE');
-  if(curFilter==='anom') items=items.filter(r=>r.anom.includes('ADA ANOMALI'));
-  if(curFilter==='acc') items=items.filter(r=>r.status==='Accomplished');
-  items.forEach(r => {
+  if(curFilter==='high') items=items.filter(r=>r.prob!==undefined&&!isNaN(r.prob)&&r.prob<0.55);
+  if(curFilter==='idle') items=items.filter(r=>(r.status||'').toLowerCase().includes('idle'));
+  if(curFilter==='anom') items=items.filter(r=>(r.anom||'').includes('ADA'));
+  if(curFilter==='acc')  items=items.filter(r=>(r.status||'').toLowerCase().includes('accomplished'));
+  buildDetailTableFiltered(items);
+  const _bt=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  _bt('rot-filtered-count',items.length); _bt('rot-total-count',ROT.length);
+}
+// -- legacy forEach stub (not used; buildDetailTableFiltered handles rendering)
+function _detailLegacyStub() { const items=[]; items.forEach(r => {
     const colP = r.prob>=0.85?'var(--G)':r.prob>=0.6?'var(--Y)':'var(--R)';
     const statusClass = r.status==='Accomplished'?'p-acc':r.status==='EFISIENSI'?'p-efi':r.status==='IDLE'?'p-idl':r.status==='Scheduled'||r.status==='Re-Scheduled'?'p-sch':'p-abk';
     const tr = document.createElement('tr');
@@ -3365,6 +3721,7 @@ function buildDetailTable() {
       <td class="r">${(r.anom||'').includes('ADA')?'<span style="color:var(--O);font-size:12px">⚠ ADA</span>':'<span style="color:var(--G);font-size:12px">AMAN</span>'}</td>`;
     tbody.appendChild(tr);
   });
+}
 }
 
 // ─── ANOMALI GI BARS ──────────────────────────────────────────
@@ -4029,6 +4386,15 @@ window.addEventListener('load', () => {
   drawYearlyChart();
   drawMonthlyAnomChart();
   drawCumulAnomChart();
+  // Populate filter dropdowns with initial static data
+  try { populateROTFilterOptions(); } catch(e){}
+  try { buildDetailTableFiltered(ROT); } catch(e){}
+  try {
+    if (ANOM_ROWS.length > 0) {
+      populateAnomFilterOptions();
+      buildFullAnomTable(ANOM_ROWS);
+    }
+  } catch(e) {}
   const now = new Date();
   const ts = now.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'}) + ' — ' + now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}) + ' WIB';
   if(el('hd-ts')) el('hd-ts').textContent = ts;
@@ -4293,6 +4659,7 @@ function parseAnomali(wb, addLog) {
   updateKPIbyId('kpi-anom-notyet',totNotYet);
   updateKPIbyId('kpi-anom-pengajuan',totPengajuan);
   updateKPIbyId('kpi-anom-padam',totPadam);
+  // NOTE: ANOM_ROWS is populated separately via rebuildANOMData/applyLiveData
   // Update header
   const hb=document.querySelector('#hd-ts');
   if(hb) hb.textContent=new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'})+' — Data diperbarui';
@@ -4873,6 +5240,9 @@ function applyLiveData(data) {
   }
   let anomEnriched = Object.assign({}, anom);
   if (data.anomRows && data.anomRows.length > 0) {
+    // Store raw rows for full table + filters
+    ANOM_ROWS.length = 0;
+    data.anomRows.forEach(r => ANOM_ROWS.push(r));
     rebuildANOMData(data.anomRows);
     const extra = computeAnomEnrichment(data.anomRows);
     anomEnriched = Object.assign(anomEnriched, extra);
@@ -4930,6 +5300,16 @@ function applyLiveData(data) {
   applyMLData(data.ml || null);
   // After ML applied, update high-risk count with real probs
   setTimeout(() => updateDetailTabCounts(rot), 200);
+
+  // ══ 10. Populate filter dropdowns + build full tables ══════════
+  try { populateROTFilterOptions(); } catch(e) {}
+  try { populateAnomFilterOptions(); } catch(e) {}
+  try { applyROTFilters(); } catch(e) {}
+  try {
+    if (ANOM_ROWS.length > 0) {
+      buildFullAnomTable(ANOM_ROWS);
+    }
+  } catch(e) {}
 
   // ══ 10. Timestamp update ══════════════════════════════════════
   ['last-update','hd-ts','ft-ts'].forEach(id => {
