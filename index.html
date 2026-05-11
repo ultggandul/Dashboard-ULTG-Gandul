@@ -278,11 +278,14 @@ footer{
 </style>
 <script src="./Dashboard ULTG Gandul — PLN UIT JBB UPDATE_files/xlsx.full.min.js"></script></head>
 <body>
-<!-- ── LIVE DATA LOADING OVERLAY ── -->
-<div id="live-overlay" style="position:fixed;inset:0;background:rgba(7,15,32,.82);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .4s">
-  <div style="width:48px;height:48px;border:3px solid rgba(0,113,197,.3);border-top-color:#0071C5;border-radius:50%;animation:spin .8s linear infinite"></div>
-  <div style="font-family:'Poppins',sans-serif;font-size:15px;color:#E8F0FB;font-weight:600">Memuat data live dari Spreadsheet...</div>
-  <div style="font-size:12px;color:#7A94BB">Menghubungi Google Sheets API</div>
+<!-- ── LIVE DATA STATUS TOAST (non-blocking) ── -->
+<div id="live-overlay" style="position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--bg2);border:1px solid var(--LN2);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 24px rgba(0,0,0,.4);transition:opacity .4s;max-width:340px">
+  <div style="width:20px;height:20px;border:2px solid rgba(0,113,197,.3);border-top-color:#0071C5;border-radius:50%;flex-shrink:0;animation:spin .8s linear infinite"></div>
+  <div style="flex:1;min-width:0">
+    <div id="ov-msg" style="font-family:'Poppins',sans-serif;font-size:13px;color:#E8F0FB;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Memuat data live...</div>
+    <div id="ov-sub" style="font-size:11px;color:#7A94BB;margin-top:2px">Menghubungi Google Sheets API</div>
+  </div>
+  <button onclick="dismissOverlay()" title="Tutup" style="background:none;border:none;color:#7A94BB;cursor:pointer;font-size:16px;padding:2px 6px;border-radius:4px;flex-shrink:0">×</button>
 </div>
 <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 <div class="pg">
@@ -4930,38 +4933,68 @@ function applyMLData(ml) {
 
 const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbxJ6mVHowI_7gBlhWZ3lCZ-9con1RgmWVeCspl9aFdJuYD31uTyXSqlNjf3xOXvAzHTAw/exec';
 
+// ── Helper: dismiss the toast overlay ──────────────────────
+function dismissOverlay(msg, color) {
+  const ov = document.getElementById('live-overlay');
+  if (!ov) return;
+  if (msg) {
+    const sp = ov.querySelector('#ov-msg');
+    if (sp) sp.textContent = msg;
+    const spinner = ov.querySelector('[style*="animation:spin"]');
+    if (spinner) { spinner.style.animation = 'none'; spinner.style.borderColor = color||'#7A94BB'; spinner.style.borderTopColor = color||'#7A94BB'; }
+  }
+  setTimeout(() => { ov.style.opacity = '0'; setTimeout(() => { if(ov.parentNode) ov.remove(); }, 500); }, msg ? 2000 : 0);
+}
+
 async function fetchLiveData() {
   const setBadge = (txt, color) => {
     const b = document.getElementById('live-fetch-badge');
     if (b) { b.innerHTML = txt; b.style.color = color; }
   };
+  const setOv = (msg, sub) => {
+    const m = document.getElementById('ov-msg');
+    const s = document.getElementById('ov-sub');
+    if (m) m.textContent = msg;
+    if (s) s.textContent = sub || '';
+  };
 
-  setBadge('🔄 Memuat data...', '#FFC107');
+  // ── Hard safety timeout: overlay always dismissed after 12s ──
+  const safetyTimer = setTimeout(() => {
+    console.warn('[ULTG] Safety timeout — dismissing overlay');
+    setBadge('⚠ Timeout · data statis digunakan', '#FF8F00');
+    dismissOverlay('Timeout · data statis', '#FF8F00');
+  }, 12000);
 
-  // Coba fetch() biasa dulu (lebih reliable dari JSONP)
+  const done = () => clearTimeout(safetyTimer);
+
+  setBadge('🔄 Memuat data live...', '#FFC107');
+  setOv('Menghubungi Sheets API...', 'fetch()');
+
+  // ── Try fetch() first ──
   try {
-    const res = await fetch(SHEETS_API_URL + '?t=' + Date.now());
+    const ctrl = new AbortController();
+    const fetchTimer = setTimeout(() => ctrl.abort(), 8000);
+    const res = await fetch(SHEETS_API_URL + '?t=' + Date.now(), { signal: ctrl.signal });
+    clearTimeout(fetchTimer);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     if (data.error) throw new Error(data.error);
+    done();
     applyLiveData(data);
     setBadge('✅ Live · ' + (data.updated || ''), '#00C07B');
+    dismissOverlay('✅ Data live berhasil dimuat', '#00C07B');
     console.log('[ULTG Live] OK via fetch():', data.updated);
-    // Dismiss loading overlay
-    const ov = document.getElementById('live-overlay');
-    if (ov) { ov.style.opacity = '0'; setTimeout(() => ov.remove(), 500); }
     return;
   } catch(e1) {
-    console.warn('[ULTG Live] fetch() gagal, coba JSONP:', e1.message);
+    console.warn('[ULTG Live] fetch() gagal:', e1.message);
+    setOv('fetch() gagal, coba JSONP...', e1.message.substring(0,40));
   }
 
-  // Fallback: JSONP
+  // ── Fallback: JSONP ──
   try {
     await new Promise((resolve, reject) => {
       const cbName = '__ultgCb_' + Date.now();
-      const timer  = setTimeout(() => {
-        cleanup(); reject(new Error('timeout'));
-      }, 15000);
+      const timer  = setTimeout(() => { cleanup(); reject(new Error('JSONP timeout 8s')); }, 8000);
 
       function cleanup() {
         const s = document.getElementById('jsonp-loader');
@@ -4973,28 +5006,30 @@ async function fetchLiveData() {
       window[cbName] = (data) => {
         cleanup();
         if (data.error) { reject(new Error(data.error)); return; }
+        done();
         applyLiveData(data);
         setBadge('✅ Live · ' + (data.updated || ''), '#00C07B');
+        dismissOverlay('✅ Data live berhasil dimuat', '#00C07B');
         console.log('[ULTG Live] OK via JSONP:', data.updated);
-        // Dismiss loading overlay
-        const ov2 = document.getElementById('live-overlay');
-        if (ov2) { ov2.style.opacity = '0'; setTimeout(() => ov2.remove(), 500); }
         resolve();
       };
 
       const s = document.createElement('script');
-      s.id      = 'jsonp-loader';
-      s.async   = true;
-      s.src     = SHEETS_API_URL + '?callback=' + cbName + '&t=' + Date.now();
-      s.onerror = () => { cleanup(); reject(new Error('script error')); };
+      s.id = 'jsonp-loader';
+      s.async = true;
+      s.src = SHEETS_API_URL + '?callback=' + cbName + '&t=' + Date.now();
+      s.onerror = () => { cleanup(); reject(new Error('JSONP script error')); };
       document.body.appendChild(s);
     });
   } catch(e2) {
+    done();
     console.warn('[ULTG Live] JSONP gagal:', e2.message);
-    setBadge('⚠ Gagal · data statis', '#FF8F00');
-    // Dismiss overlay on failure
-    const ovFail = document.getElementById('live-overlay');
-    if (ovFail) { ovFail.style.opacity = '0'; setTimeout(() => ovFail.remove(), 500); }
+    const errMsg = e2.message.includes('timeout') ? 'Timeout — periksa koneksi & URL Apps Script' :
+                   e2.message.includes('script') ? 'URL Apps Script tidak valid atau diblokir' :
+                   e2.message.substring(0,50);
+    setBadge('⚠ Gagal · ' + errMsg, '#FF8F00');
+    setOv('⚠ Gagal · data statis digunakan', errMsg);
+    dismissOverlay('⚠ API gagal · data statis', '#FF8F00');
   }
 }
 
@@ -5390,11 +5425,14 @@ function startRealtimeClock() {
 
 // ── Jalankan fetch saat halaman siap + auto-polling ──
 window.addEventListener('load', () => {
-  // Reuse elemen hd-ts sebagai badge status
+  // Create a separate live-fetch-badge element (don't rename hd-ts)
   const hdTs = document.getElementById('hd-ts');
-  if (hdTs) {
-    hdTs.innerHTML = '🔄 Memuat data live...';
-    hdTs.id = 'live-fetch-badge';
+  if (hdTs && !document.getElementById('live-fetch-badge')) {
+    const badge = document.createElement('div');
+    badge.id = 'live-fetch-badge';
+    badge.style.cssText = 'font-size:11px;color:var(--Y);margin-top:4px;text-align:right;font-family:"JetBrains Mono",monospace';
+    badge.innerHTML = '🔄 Memuat data live...';
+    hdTs.insertAdjacentElement('afterend', badge);
   }
 
   // Mulai real-time clock
