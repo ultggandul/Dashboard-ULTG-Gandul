@@ -276,71 +276,31 @@ footer{
 .period-btn:hover{background:rgba(0,113,197,.15);color:var(--T);}
 .period-btn.on{background:rgba(0,113,197,.25);color:var(--A);border-color:rgba(0,113,197,.5);}
 
-/* NEW FEATURE: File Action Buttons */
-.file-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 10px;
-  border-radius: 7px;
-  border: 1px solid transparent;
-  font-family: 'Poppins', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all .2s cubic-bezier(.16,1,.3,1);
-  white-space: nowrap;
-  line-height: 1;
+/* APPSHEET FILE BUTTON — tombol buka file anomali & berita penyelesaian */
+.file-btn-wrap{display:flex;flex-direction:column;gap:5px;min-width:160px}
+.file-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;
+  padding:5px 10px;border-radius:8px;border:1px solid transparent;
+  cursor:pointer;transition:all .18s;white-space:nowrap;text-decoration:none;
+  letter-spacing:.01em;
 }
-.file-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.3); }
-.file-btn:active { transform: translateY(0); }
-
-/* Tombol File Anomali — biru PLN */
-.btn-file-anom {
-  background: rgba(0,113,197,.15);
-  color: #4DA6FF;
-  border-color: rgba(0,113,197,.4);
+.file-btn-anom{
+  background:rgba(0,113,197,.12);border-color:rgba(0,113,197,.35);color:#4DA6FF;
 }
-.btn-file-anom:hover { background: rgba(0,113,197,.3); border-color: rgba(0,113,197,.7); color: #80C4FF; }
-
-/* Tombol Berita Acara — hijau */
-.btn-file-ba {
-  background: rgba(0,192,123,.12);
-  color: #00C07B;
-  border-color: rgba(0,192,123,.4);
+.file-btn-anom:hover{background:rgba(0,113,197,.25);border-color:rgba(0,113,197,.6);color:#7EC8FF;transform:translateY(-1px);box-shadow:0 3px 12px rgba(0,113,197,.2);}
+.file-btn-berita{
+  background:rgba(0,192,123,.1);border-color:rgba(0,192,123,.3);color:#00C07B;
 }
-.btn-file-ba:hover { background: rgba(0,192,123,.25); border-color: rgba(0,192,123,.7); color: #4de8b1; }
-
-/* Tombol disabled */
-.file-btn:disabled, .file-btn[disabled] {
-  opacity: .35;
-  cursor: not-allowed;
-  pointer-events: none;
-  transform: none !important;
-  box-shadow: none !important;
+.file-btn-berita:hover{background:rgba(0,192,123,.22);border-color:rgba(0,192,123,.6);color:#2EE8A0;transform:translateY(-1px);box-shadow:0 3px 12px rgba(0,192,123,.15);}
+.file-btn.disabled{
+  opacity:0.38;cursor:not-allowed;pointer-events:none;
 }
-.file-btn-wrap { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
-
-/* Tooltip */
-[data-tip] { position: relative; }
-[data-tip]:hover::after {
-  content: attr(data-tip);
-  position: absolute;
-  bottom: calc(100% + 6px);
-  right: 0;
-  background: var(--bg3);
-  border: 1px solid var(--LN2);
-  color: var(--M);
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 10.5px;
-  white-space: nowrap;
-  z-index: 100;
-  box-shadow: 0 4px 12px rgba(0,0,0,.3);
-  pointer-events: none;
+.file-btn-icon{font-size:13px;flex-shrink:0}
+@media(max-width:900px){
+  .file-btn-wrap{min-width:120px}
+  .file-btn{font-size:10px;padding:4px 8px}
 }
-
 </style>
 <script src="./Dashboard ULTG Gandul — PLN UIT JBB UPDATE_files/xlsx.full.min.js"></script></head>
 <body>
@@ -838,9 +798,15 @@ footer{
       <input class="flt-input" id="rot-search" type="text" placeholder="🔍 Cari uraian pekerjaan, nama GI..." oninput="applyROTFilters()">
       <span class="flt-count" id="rot-count-badge"><strong id="rot-filtered-count">69</strong> / <span id="rot-total-count">69</span> item</span>
     </div>
+    <!-- DYNAMIC BAY FILTER + CASCADING FILTER for ROT -->
     <div class="flt-row">
-      <select class="flt-select" id="rot-f-lokasi" onchange="applyROTFilters()">
+      <!-- CASCADING FILTER: GI → BAY untuk ROT -->
+      <select class="flt-select" id="rot-f-lokasi" onchange="onROTGIChange()">
         <option value="">🏭 Semua GI/GITET</option>
+      </select>
+      <!-- DYNAMIC BAY FILTER: hanya menampilkan bay dari GI yang dipilih -->
+      <select class="flt-select" id="rot-f-bay" onchange="applyROTFilters()">
+        <option value="">🔌 Semua Bay</option>
       </select>
       <select class="flt-select" id="rot-f-status" onchange="applyROTFilters()">
         <option value="">📋 Semua Realisasi</option>
@@ -2099,28 +2065,30 @@ footer{
     </div>
   </div>
 
-</div>
+  <!-- ANOMALI TAB FIX: Tabel Lengkap Anomali dipindahkan ke DALAM tab-anomali -->
+  <!-- APPSHEET FILE BUTTON: Kolom File Anomali & Berita Penyelesaian ditambahkan -->
+  <!-- DYNAMIC BAY FILTER: Filter BAY dinamis berdasarkan GI yang dipilih -->
+  <!-- CASCADING FILTER: GI → BAY cascading -->
 
-  <!-- NEW FEATURE: Tabel Interaktif Anomali — HANYA tampil di tab Resume Anomali -->
   <div class="sec" style="margin-top:24px">
     <div class="sd" style="background:var(--O)"></div>
     <div class="sl">Tabel Lengkap Anomali — Filter Interaktif</div>
     <div class="sr"></div>
   </div>
 
-  <!-- UPDATED FILTER: Filter panel + filter Bay baru -->
   <div class="flt-panel">
     <div class="flt-row">
       <input class="flt-input" id="anom-search" type="text" placeholder="🔍 Cari deskripsi, nama alat, bay..." oninput="applyAnomFilters()">
       <span class="flt-count" id="anom-count-badge"><strong id="anom-filtered-count">—</strong> / <span id="anom-total-count">—</span> anomali</span>
     </div>
     <div class="flt-row">
-      <select class="flt-select" id="anom-f-gi" onchange="applyAnomFilters()">
+      <!-- CASCADING FILTER: GI → BAY -->
+      <select class="flt-select" id="anom-f-gi" onchange="onAnomGIChange()">
         <option value="">🏭 Semua GI/GITET</option>
       </select>
-      <!-- NEW FEATURE: Filter Bay — dynamic unique dari kolom Bay -->
+      <!-- DYNAMIC BAY FILTER: hanya menampilkan bay dari GI terpilih -->
       <select class="flt-select" id="anom-f-bay" onchange="applyAnomFilters()">
-        <option value="">⚡ Semua Bay</option>
+        <option value="">🔌 Semua Bay</option>
       </select>
       <select class="flt-select" id="anom-f-status" onchange="applyAnomFilters()">
         <option value="">📋 Semua Status</option>
@@ -2148,7 +2116,6 @@ footer{
     </div>
   </div>
 
-  <!-- FILE BUTTON: Tabel dengan kolom File Anomali + Berita Acara -->
   <div class="card">
     <div class="scroll" style="max-height:520px">
       <table class="tbl" id="full-anom-table">
@@ -2163,11 +2130,10 @@ footer{
           <th class="r">Titik Anomali</th>
           <th class="r">Status</th>
           <th class="r">Tgl Lapor</th>
-          <th class="r">File Anomali</th>
-          <th class="r">Berita Acara</th>
+          <th class="r">File Dokumen</th>
         </tr></thead>
         <tbody id="full-anom-tbody">
-          <tr><td colspan="12" style="text-align:center;color:var(--M);padding:24px">Memuat data anomali...</td></tr>
+          <tr><td colspan="11" style="text-align:center;color:var(--M);padding:24px">Memuat data anomali...</td></tr>
         </tbody>
       </table>
     </div>
@@ -3237,19 +3203,6 @@ const ALAT = [
 // ─── ANOMALI RAW ROWS (for full table + filters) ─────────
 let ANOM_ROWS = [];
 
-// NEW FEATURE: Helper buka file di tab baru
-function openFileInTab(url) {
-  if (!url || !url.trim()) {
-    alert('File tidak tersedia untuk anomali ini.');
-    return;
-  }
-  try {
-    window.open(url.trim(), '_blank', 'noopener,noreferrer');
-  } catch(e) {
-    alert('Tidak dapat membuka file: ' + e.message);
-  }
-}
-
 // ─── ANOMALI GI DATA ──────────────────────────────────────
 let ANOM_GI = [
   {gi:'GITET 500KV GANDUL',  total:105, done:53, notyet:47, pengajuan:5,  padam:56, padamBack:29},
@@ -3273,27 +3226,11 @@ let ANOM_BIDANG = [
 function el(id){return document.getElementById(id)}
 
 // ─── TABS ────────────────────────────────────────────────────
-// <!-- UPDATED FILTER --> Tab switching dengan conditional rendering
-let _activeTab = 'resume';
 function goTab(name, btn) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
   document.querySelectorAll('.tbtn[onclick^="goTab"]').forEach(b => b.classList.remove('on'));
   el('tab-' + name).classList.add('on');
   if (btn) btn.classList.add('on');
-  _activeTab = name;
-  // Conditional rendering — hanya render tabel di tab yang aktif
-  if (name === 'anomali') {
-    // Render tabel anomali saat tab Resume Anomali aktif
-    try { populateAnomFilterOptions(); } catch(e) {}
-    try {
-      if (ANOM_ROWS.length > 0) applyAnomFilters();
-    } catch(e) {}
-  }
-  if (name === 'detail') {
-    // Render tabel ROT saat tab Detail Item aktif
-    try { populateROTFilterOptions(); } catch(e) {}
-    try { applyROTFilters(); } catch(e) {}
-  }
 }
 
 // ── REBUILD STACK_BY_MO + KAT_DATA FROM ROT ARRAY ────────────────
@@ -3592,6 +3529,7 @@ function buildResumeTable() {
 // ROT FULL TABLE — INTERACTIVE FILTERS
 // ══════════════════════════════════════════════════════════════
 
+// DYNAMIC BAY FILTER + CASCADING FILTER for ROT
 function populateROTFilterOptions() {
   const lokSet = new Set(), katSet = new Set();
   ROT.forEach(r => {
@@ -3610,15 +3548,44 @@ function populateROTFilterOptions() {
   };
   fillSel('rot-f-lokasi', lokSet);
   fillSel('rot-f-kat',    katSet);
+  // Populate BAY based on all ROT data initially
+  refreshROTBayDropdown('');
   const setT = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
   setT('rot-total-count', ROT.length);
   setT('rot-filtered-count', ROT.length);
+}
+
+// DYNAMIC BAY FILTER: refresh dropdown BAY ROT berdasarkan GI yang dipilih
+function refreshROTBayDropdown(selectedGI) {
+  const baySet = new Set();
+  ROT.forEach(r => {
+    if (!selectedGI || r.lokasi === selectedGI) {
+      if (r.bay) baySet.add(r.bay);
+    }
+  });
+  const sel = document.getElementById('rot-f-bay'); if (!sel) return;
+  const cur = sel.value;
+  while (sel.options.length > 1) sel.remove(1);
+  [...baySet].sort().forEach(v => {
+    const o = document.createElement('option'); o.value = v; o.textContent = v;
+    sel.appendChild(o);
+  });
+  // Reset BAY jika nilai lama tidak valid untuk GI baru
+  if (cur && [...baySet].includes(cur)) { sel.value = cur; } else { sel.value = ''; }
+}
+
+// CASCADING FILTER: handler ketika GI berubah pada filter ROT
+function onROTGIChange() {
+  const gi = document.getElementById('rot-f-lokasi')?.value || '';
+  refreshROTBayDropdown(gi);
+  applyROTFilters();
 }
 
 function applyROTFilters() {
   const search   = (document.getElementById('rot-search')?.value   || '').toLowerCase().trim();
   const fStatus  = document.getElementById('rot-f-status')?.value  || '';
   const fLokasi  = document.getElementById('rot-f-lokasi')?.value  || '';
+  const fBay     = document.getElementById('rot-f-bay')?.value     || '';
   const fKat     = document.getElementById('rot-f-kat')?.value     || '';
   const fHari    = document.getElementById('rot-f-hari')?.value    || '';
   const fAnom    = document.getElementById('rot-f-anom')?.value    || '';
@@ -3626,12 +3593,13 @@ function applyROTFilters() {
   const filtered = ROT.filter(r => {
     if (fStatus && (r.status||'') !== fStatus)                              return false;
     if (fLokasi && (r.lokasi||'') !== fLokasi)                              return false;
+    if (fBay    && (r.bay   ||'') !== fBay)                                 return false;
     if (fKat    && (r.kat   ||'') !== fKat)                                  return false;
     if (fHari   && (r.hari  ||'') !== fHari)                                 return false;
     if (fAnom === 'ada'  && !(r.anom||'').includes('ADA'))                   return false;
     if (fAnom === 'aman' &&  (r.anom||'').includes('ADA'))                   return false;
     if (search) {
-      const hay = ((r.uraian||'')+(r.lokasi||'')+(r.kat||'')).toLowerCase();
+      const hay = ((r.uraian||'')+(r.lokasi||'')+(r.kat||'')+(r.bay||'')).toLowerCase();
       if (!hay.includes(search)) return false;
     }
     return true;
@@ -3645,9 +3613,11 @@ function applyROTFilters() {
 
 function resetROTFilters() {
   ['rot-search'].forEach(id => { const e=document.getElementById(id); if(e) e.value=''; });
-  ['rot-f-status','rot-f-lokasi','rot-f-kat','rot-f-hari','rot-f-anom'].forEach(id => {
+  ['rot-f-status','rot-f-lokasi','rot-f-bay','rot-f-kat','rot-f-hari','rot-f-anom'].forEach(id => {
     const e = document.getElementById(id); if(e) e.value = '';
   });
+  // Refresh BAY dropdown to show all bays after reset
+  refreshROTBayDropdown('');
   applyROTFilters();
 }
 
@@ -3682,17 +3652,18 @@ function buildDetailTableFiltered(items) {
 // ANOMALI FULL TABLE — INTERACTIVE FILTERS
 // ══════════════════════════════════════════════════════════════
 
-// UPDATED FILTER: populateAnomFilterOptions — ditambahkan filter Bay
+// ══════════════════════════════════════════════════════════════
+// ANOMALI FULL TABLE — INTERACTIVE FILTERS
+// CASCADING FILTER: GI → BAY (DYNAMIC BAY FILTER)
+// ══════════════════════════════════════════════════════════════
+
 function populateAnomFilterOptions() {
   if (!ANOM_ROWS || !ANOM_ROWS.length) return;
   const giSet = new Set(), bidSet = new Set(), klsSet = new Set();
-  // NEW FEATURE: Bay set dari data dinamis
-  const baySet = new Set();
   ANOM_ROWS.forEach(r => {
-    if (r.lokasi)      giSet.add(r.lokasi);
-    if (r.bidang)      bidSet.add(r.bidang);
+    if (r.lokasi)     giSet.add(r.lokasi);
+    if (r.bidang)     bidSet.add(r.bidang);
     if (r.klasifikasi) klsSet.add(r.klasifikasi);
-    if (r.bay && r.bay.trim()) baySet.add(r.bay.trim());
   });
   const fillSel = (id, vals) => {
     const sel = document.getElementById(id); if (!sel) return;
@@ -3708,18 +3679,42 @@ function populateAnomFilterOptions() {
   fillSel('anom-f-gi',          giSet);
   fillSel('anom-f-bidang',      bidSet);
   fillSel('anom-f-klasifikasi', klsSet);
-  // NEW FEATURE: Isi filter Bay
-  fillSel('anom-f-bay', baySet);
   document.getElementById('anom-total-count')    && (document.getElementById('anom-total-count').textContent    = ANOM_ROWS.length);
   document.getElementById('anom-filtered-count') && (document.getElementById('anom-filtered-count').textContent = ANOM_ROWS.length);
+  // Populate BAY based on all data initially
+  refreshAnomBayDropdown('');
 }
 
-// UPDATED FILTER: applyAnomFilters dengan filter Bay
+// CASCADING FILTER: Saat GI berubah, refresh BAY dropdown hanya dari GI terpilih
+function refreshAnomBayDropdown(selectedGI) {
+  const baySet = new Set();
+  ANOM_ROWS.forEach(r => {
+    if (!selectedGI || r.lokasi === selectedGI) {
+      if (r.bay) baySet.add(r.bay);
+    }
+  });
+  const sel = document.getElementById('anom-f-bay'); if (!sel) return;
+  const cur = sel.value;
+  while (sel.options.length > 1) sel.remove(1);
+  [...baySet].sort().forEach(v => {
+    const o = document.createElement('option'); o.value = v; o.textContent = v;
+    sel.appendChild(o);
+  });
+  // Reset BAY jika nilai lama tidak valid untuk GI baru
+  if (cur && [...baySet].includes(cur)) { sel.value = cur; } else { sel.value = ''; }
+}
+
+// CASCADING FILTER: handler ketika GI berubah
+function onAnomGIChange() {
+  const gi = document.getElementById('anom-f-gi')?.value || '';
+  refreshAnomBayDropdown(gi);
+  applyAnomFilters();
+}
+
 function applyAnomFilters() {
   if (!ANOM_ROWS || !ANOM_ROWS.length) return;
   const search   = (document.getElementById('anom-search')?.value        || '').toLowerCase().trim();
   const fGI      = document.getElementById('anom-f-gi')?.value           || '';
-  // NEW FEATURE: Baca filter Bay
   const fBay     = document.getElementById('anom-f-bay')?.value          || '';
   const fStatus  = document.getElementById('anom-f-status')?.value       || '';
   const fBidang  = document.getElementById('anom-f-bidang')?.value       || '';
@@ -3729,8 +3724,7 @@ function applyAnomFilters() {
 
   const filtered = ANOM_ROWS.filter(r => {
     if (fGI     && (r.lokasi    ||'') !== fGI)     return false;
-    // NEW FEATURE: Filter berdasarkan Bay
-    if (fBay    && (r.bay       ||'').trim() !== fBay) return false;
+    if (fBay    && (r.bay       ||'') !== fBay)     return false;
     if (fBidang && (r.bidang    ||'') !== fBidang)  return false;
     if (fKat    && (r.kategori  ||'') !== fKat)     return false;
     if (fPeng   && (r.pengerjaan||'') !== fPeng)    return false;
@@ -3756,22 +3750,22 @@ function applyAnomFilters() {
   setT('anom-total-count',    ANOM_ROWS.length);
 }
 
-// UPDATED FILTER: resetAnomFilters — sertakan filter Bay
 function resetAnomFilters() {
   ['anom-search'].forEach(id => { const e=document.getElementById(id); if(e) e.value=''; });
-  // NEW FEATURE: reset anom-f-bay juga
   ['anom-f-gi','anom-f-bay','anom-f-status','anom-f-bidang','anom-f-kat','anom-f-pengerjaan','anom-f-klasifikasi'].forEach(id => {
     const e=document.getElementById(id); if(e) e.value='';
   });
+  // Refresh BAY dropdown to show all bays after reset
+  refreshAnomBayDropdown('');
   applyAnomFilters();
 }
 
-// FILE BUTTON: buildFullAnomTable dengan kolom File Anomali & Berita Acara
+// APPSHEET FILE BUTTON: buildFullAnomTable dengan tombol file anomali & berita penyelesaian
 function buildFullAnomTable(rows) {
   const tbody = document.getElementById('full-anom-tbody'); if (!tbody) return;
   tbody.innerHTML = '';
   if (!rows || rows.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;color:var(--M);padding:24px">Tidak ada data yang sesuai filter</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--M);padding:24px">Tidak ada data yang sesuai filter</td></tr>';
     return;
   }
   const STATUS_CLASS = (st) => {
@@ -3780,35 +3774,35 @@ function buildFullAnomTable(rows) {
     if (['pengajuan','upt'].some(x=>s.includes(x)))           return 'p-sch';
     return 'p-idl';
   };
-  // FILE BUTTON: Helper render tombol open file
-  const makeFileBtn = (url, label, icon, cls) => {
-    const hasUrl = url && url.trim().length > 0;
+  // APPSHEET FILE BUTTON: helper untuk render tombol file
+  const makeFileBtn = (url, icon, label, cls) => {
+    const hasUrl = url && url.trim() !== '' && url !== '-' && url !== 'null';
     if (hasUrl) {
-      return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="file-btn ${cls}" title="${label}">
-        ${icon} ${label}
-      </a>`;
+      const safeUrl = url.trim();
+      return `<a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="file-btn ${cls}" title="Buka: ${label}">
+        <span class="file-btn-icon">${icon}</span>${label}</a>`;
     } else {
-      return `<button class="file-btn ${cls}" disabled data-tip="File tidak tersedia" style="cursor:not-allowed;opacity:.35">
-        ${icon} ${label}
-      </button>`;
+      return `<span class="file-btn ${cls} disabled" title="File belum tersedia">
+        <span class="file-btn-icon">${icon}</span>${label}</span>`;
     }
   };
+
   rows.forEach((r,i) => {
     const sc = STATUS_CLASS(r.status);
     const katCls = (r.kategori||'').toUpperCase().includes('MAJOR') ? 'co' : 'cy';
     const padamBadge = (r.pengerjaan||'').toUpperCase().includes('PADAM')
       ? '<span class="pill p-abk" style="font-size:10px">⚡ PADAM</span>'
       : '<span class="pill p-efi" style="font-size:10px">TDP</span>';
-    // FILE BUTTON: Ambil link dari data row (support fileAnom / fileBA / linkAnom / linkBA / dll)
-    const urlAnom = r.fileAnom || r.linkAnom || r.file_anomali || r.urlAnom || '';
-    const urlBA   = r.fileBA   || r.linkBA   || r.berita_acara || r.urlBA   || '';
-    const btnAnom = makeFileBtn(urlAnom, 'Anomali', '📄', 'btn-file-anom');
-    const btnBA   = makeFileBtn(urlBA,   'BA', '📋', 'btn-file-ba');
+    // APPSHEET FILE BUTTON: baca field file dari data baris
+    const fileAnom   = r.fileAnomali   || r.file_anomali   || r.file || '';
+    const fileBerita = r.fileBerita    || r.file_berita     || r.berita || '';
+    const btnAnom   = makeFileBtn(fileAnom,   '📄', 'File Anomali',   'file-btn-anom');
+    const btnBerita = makeFileBtn(fileBerita, '✅', 'Berita Selesai', 'file-btn-berita');
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--M)">${i+1}</td>
       <td><div class="bay-name" style="font-size:12px">${r.lokasi||'—'}</div></td>
-      <td style="max-width:240px">
+      <td style="max-width:220px">
         <div class="bay-name" style="font-size:12.5px;line-height:1.4">${r.namaAlat||r.deskripsi||'—'}</div>
         <div class="bay-sub" style="font-size:11px">${(r.deskripsi||'').substring(0,60)+(r.deskripsi&&r.deskripsi.length>60?'...':'')}</div>
       </td>
@@ -3819,8 +3813,7 @@ function buildFullAnomTable(rows) {
       <td class="r" style="font-size:11px;color:var(--M);max-width:120px">${(r.klasifikasi||'—').substring(0,20)}</td>
       <td class="r"><span class="pill ${sc}" style="font-size:10.5px">${r.status||'—'}</span></td>
       <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--M)">${r.tgl||'—'}</td>
-      <td class="r"><div class="file-btn-wrap">${btnAnom}</div></td>
-      <td class="r"><div class="file-btn-wrap">${btnBA}</div></td>`;
+      <td class="r"><div class="file-btn-wrap">${btnAnom}${btnBerita}</div></td>`;
     tbody.appendChild(tr);
   });
 }
@@ -4510,16 +4503,12 @@ window.addEventListener('load', () => {
   // Populate filter dropdowns with initial static data
   try { populateROTFilterOptions(); } catch(e){}
   try { buildDetailTableFiltered(ROT); } catch(e){}
-  // UPDATED FILTER: Anomali table hanya dirender jika tab anomali aktif
-  // (pada init, tab aktif adalah 'resume' sehingga tidak render dulu)
-  if (typeof _activeTab !== 'undefined' && _activeTab === 'anomali') {
-    try {
-      if (ANOM_ROWS.length > 0) {
-        populateAnomFilterOptions();
-        applyAnomFilters();
-      }
-    } catch(e) {}
-  }
+  try {
+    if (ANOM_ROWS.length > 0) {
+      populateAnomFilterOptions();
+      buildFullAnomTable(ANOM_ROWS);
+    }
+  } catch(e) {}
   const now = new Date();
   const ts = now.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'}) + ' — ' + now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}) + ' WIB';
   if(el('hd-ts')) el('hd-ts').textContent = ts;
@@ -4697,9 +4686,6 @@ function parseAnomali(wb, addLog) {
         iBidang=ci(['BIDANG AJUAN','BIDANG','KATEGORI']), iPengerjaan=ci(['PENGERJAAN']),
         iPrioritas=ci(['SKALA PRIORITAS','PRIORITAS']), iAlokasi=ci(['ALOKASI']),
         iRealisasi=ci(['REALISASI']);
-  // NEW FEATURE: Deteksi kolom File Anomali dan Berita Acara dari spreadsheet
-  const iFileAnom = ci(['FILE ANOMALI','LINK ANOMALI','LINK FILE','FILE LINK','LINK_ANOMALI']);
-  const iFileBA   = ci(['BERITA ACARA','FILE BA','LINK BA','BA','LINK_BA']);
 
   const giStats={}, bidangStats={}, monthDone={};
   let totDone=0, totNotYet=0, totPengajuan=0, totPadam=0;
@@ -4712,9 +4698,6 @@ function parseAnomali(wb, addLog) {
     const pengerjaan=(r[iPengerjaan]||'').toString().trim();
     const klasifikasi=(r[iKlasifikasi]||'').toString().trim();
     const prioritas=(r[iPrioritas]||'').toString().trim();
-    // NEW FEATURE: Baca link file dari spreadsheet
-    const fileAnom=(iFileAnom>=0?(r[iFileAnom]||''):'').toString().trim();
-    const fileBA=(iFileBA>=0?(r[iFileBA]||''):'').toString().trim();
 
     if(!giStats[pelapor]) giStats[pelapor]={gi:pelapor,total:0,done:0,notyet:0,pengajuan:0,padam:0,padamBack:0};
     giStats[pelapor].total++;
@@ -5404,7 +5387,6 @@ function applyLiveData(data) {
   let anomEnriched = Object.assign({}, anom);
   if (data.anomRows && data.anomRows.length > 0) {
     // Store raw rows for full table + filters
-    // NEW FEATURE: anomRows sudah bisa mengandung field fileAnom dan fileBA dari Google Apps Script
     ANOM_ROWS.length = 0;
     data.anomRows.forEach(r => ANOM_ROWS.push(r));
     rebuildANOMData(data.anomRows);
@@ -5466,21 +5448,14 @@ function applyLiveData(data) {
   setTimeout(() => updateDetailTabCounts(rot), 200);
 
   // ══ 10. Populate filter dropdowns + build full tables ══════════
-  // UPDATED FILTER: ROT filters selalu (karena data mungkin diupdate di background)
   try { populateROTFilterOptions(); } catch(e) {}
-  // Hanya update ROT table jika tab Detail aktif
-  if (typeof _activeTab !== 'undefined' && _activeTab === 'detail') {
-    try { applyROTFilters(); } catch(e) {}
-  }
-  // UPDATED FILTER: Anomali — hanya render jika tab anomali aktif
-  if (typeof _activeTab === 'undefined' || _activeTab === 'anomali') {
-    try { populateAnomFilterOptions(); } catch(e) {}
-    try {
-      if (ANOM_ROWS.length > 0) {
-        applyAnomFilters();
-      }
-    } catch(e) {}
-  }
+  try { populateAnomFilterOptions(); } catch(e) {}
+  try { applyROTFilters(); } catch(e) {}
+  try {
+    if (ANOM_ROWS.length > 0) {
+      buildFullAnomTable(ANOM_ROWS);
+    }
+  } catch(e) {}
 
   // ══ 10. Timestamp update ══════════════════════════════════════
   ['last-update','hd-ts','ft-ts'].forEach(id => {
