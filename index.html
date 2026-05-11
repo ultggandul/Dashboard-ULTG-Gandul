@@ -722,14 +722,14 @@ footer{
      TAB 2: DETAIL ITEM
 ══════════════════════════════════════════════════════════ -->
 <div id="tab-detail" class="panel">
-  <div class="sec"><div class="sd" style="background:var(--C)"></div><div class="sl">Detail 69 Item ROT 2026</div><div class="sr"></div></div>
+  <div class="sec"><div class="sd" style="background:var(--C)"></div><div class="sl">Detail <span id="det-total">69</span> Item ROT 2026</div><div class="sr"></div></div>
 
   <div class="filter-bar">
-    <button class="tbtn on" onclick="filterDetail(&#39;all&#39;,this)">Semua (69)</button>
+    <button class="tbtn on" onclick="filterDetail(&#39;all&#39;,this)">Semua (<span id="flt-all">69</span>)</button>
     <button class="tbtn" id="btn-high-risk" onclick="filterDetail(&#39;high&#39;,this)">🔴 High Risk (<span id="high-risk-label">3</span>)</button>
-    <button class="tbtn" onclick="filterDetail(&#39;idle&#39;,this)">🟡 IDLE (19)</button>
-    <button class="tbtn" onclick="filterDetail(&#39;anom&#39;,this)">⚠ Ada Anomali (30)</button>
-    <button class="tbtn" onclick="filterDetail(&#39;acc&#39;,this)">✅ Accomplished (17)</button>
+    <button class="tbtn" onclick="filterDetail(&#39;idle&#39;,this)">🟡 IDLE (<span id="flt-idle">19</span>)</button>
+    <button class="tbtn" onclick="filterDetail(&#39;anom&#39;,this)">⚠ Ada Anomali (<span id="flt-anom">30</span>)</button>
+    <button class="tbtn" onclick="filterDetail(&#39;acc&#39;,this)">✅ Accomplished (<span id="flt-acc">17</span>)</button>
   </div>
 
   <div class="card">
@@ -1381,98 +1381,90 @@ footer{
   <div class="sec"><div class="sd" style="background:var(--O)"></div><div class="sl">Resume Anomali 2024 — ULTG Gandul</div><div class="sr"></div></div>
 
   <div class="krow">
-    <div class="kc" style="--kc:var(--A)"><div class="kl">Total Anomali</div><div class="kv aa">348</div><div class="ku">terdaftar 2024</div></div>
-    <div class="kc" style="--kc:var(--G)"><div class="kl">DONE</div><div class="kv gg">190</div><div class="ku" style="color:var(--G)">54.6% selesai</div></div>
-    <div class="kc" style="--kc:var(--R)"><div class="kl">NOT YET</div><div class="kv rr">144</div><div class="ku">backlog aktif</div></div>
-    <div class="kc" style="--kc:var(--P)"><div class="kl">Pengajuan UPT</div><div class="kv pp">20</div><div class="ku">eskalasi ke UPT</div></div>
-    <div class="kc" style="--kc:var(--R)"><div class="kl">URGENT Not Yet</div><div class="kv rr">9</div><div class="ku">perlu percepatan!</div></div>
-    <div class="kc" style="--kc:var(--O)"><div class="kl">MAJOR Not Yet</div><div class="kv oo">100</div><div class="ku">dampak besar</div></div>
-    <div class="kc" style="--kc:var(--Y)"><div class="kl">PADAM Total</div><div class="kv yy">153</div><div class="ku">perlu izin padam</div></div>
-    <div class="kc" style="--kc:var(--C)"><div class="kl">PADAM Backlog</div><div class="kv" style="color:var(--C)">76</div><div class="ku">50% padam belum selesai</div></div>
+    <div class="kc" style="--kc:var(--A)"><div class="kl">Total Anomali</div><div class="kv aa" id="kpi-anom-total">348</div><div class="ku" id="ku-anom-tahun">terdaftar 2024</div></div>
+    <div class="kc" style="--kc:var(--G)"><div class="kl">DONE</div><div class="kv gg" id="kpi-anom-done">190</div><div class="ku" id="ku-anom-done-pct" style="color:var(--G)">54.6% selesai</div></div>
+    <div class="kc" style="--kc:var(--R)"><div class="kl">NOT YET</div><div class="kv rr" id="kpi-anom-notyet">144</div><div class="ku">backlog aktif</div></div>
+    <div class="kc" style="--kc:var(--P)"><div class="kl">Pengajuan UPT</div><div class="kv pp" id="kpi-anom-pengajuan">20</div><div class="ku">eskalasi ke UPT</div></div>
+    <div class="kc" style="--kc:var(--R)"><div class="kl">URGENT Not Yet</div><div class="kv rr" id="kpi-anom-urgent">9</div><div class="ku">perlu percepatan!</div></div>
+    <div class="kc" style="--kc:var(--O)"><div class="kl">MAJOR Not Yet</div><div class="kv oo" id="kpi-anom-major">100</div><div class="ku">dampak besar</div></div>
+    <div class="kc" style="--kc:var(--Y)"><div class="kl">PADAM Total</div><div class="kv yy" id="kpi-anom-padam">153</div><div class="ku">perlu izin padam</div></div>
+    <div class="kc" style="--kc:var(--C)"><div class="kl">PADAM Backlog</div><div class="kv" style="color:var(--C)" id="kpi-anom-padam-back">76</div><div class="ku" id="ku-anom-padam-pct">50% padam belum selesai</div></div>
   </div>
 
   <!-- Visual chart: Done / Not Yet / Pengajuan -->
-  <div class="card gf" style="margin-bottom:18px">
+  <div id="anom-stat-card" class="card gf" style="margin-bottom:18px">
     <div class="ch">
-      <div><div class="ct">Presentasi Status Penyelesaian Anomali 2024</div><div class="cs">345 anomali terdaftar — proporsi DONE · NOT YET · Pengajuan UPT</div></div>
-      <div class="ck cg">54.6% Selesai</div>
+      <div><div class="ct">Presentasi Status Penyelesaian Anomali 2024</div><div class="cs" id="anom-stat-cs">345 anomali terdaftar — proporsi DONE · NOT YET · Pengajuan UPT</div></div>
+      <div class="ck cg" id="anom-stat-badge">54.6% Selesai</div>
     </div>
     <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center">
 
-      <!-- Donut chart -->
-      <svg viewBox="0 0 180 180" style="width:180px;flex-shrink:0">
+      <!-- Donut chart — re-drawn via drawAnomDonut() -->
+      <svg id="anom-donut-svg" viewBox="0 0 180 180" style="width:180px;flex-shrink:0">
         <defs>
           <filter id="glow-a"><fegaussianblur stdDeviation="3" result="b"></fegaussianblur><femerge><femergenode in="b"></femergenode><femergenode in="SourceGraphic"></femergenode></femerge></filter>
         </defs>
-        <!-- bg ring -->
         <circle cx="90" cy="90" r="70" fill="none" stroke="rgba(0,113,197,.1)" stroke-width="26"></circle>
-        <!-- DONE: 189/345 = 54.8% → dashLen = 54.8%*2πr = 0.548*439.82 = 241 -->
-        <circle cx="90" cy="90" r="70" fill="none" stroke="#00C07B" stroke-width="26" stroke-dasharray="241 198.82" stroke-dashoffset="109.96" stroke-linecap="round" filter="url(#glow-a)"></circle>
-        <!-- NOT YET: 136/345 = 39.4% → 173.3 -->
-        <circle cx="90" cy="90" r="70" fill="none" stroke="#E53935" stroke-width="26" stroke-dasharray="173.3 266.52" stroke-dashoffset="-132.04" stroke-linecap="round"></circle>
-        <!-- Pengajuan: 20/345 = 5.8% → 25.5 -->
-        <circle cx="90" cy="90" r="70" fill="none" stroke="#7C4DFF" stroke-width="26" stroke-dasharray="25.5 414.32" stroke-dashoffset="-308.26" stroke-linecap="round"></circle>
+        <circle id="anom-arc-done" cx="90" cy="90" r="70" fill="none" stroke="#00C07B" stroke-width="26" stroke-dasharray="241 198.82" stroke-dashoffset="109.96" stroke-linecap="round" filter="url(#glow-a)"></circle>
+        <circle id="anom-arc-notyet" cx="90" cy="90" r="70" fill="none" stroke="#E53935" stroke-width="26" stroke-dasharray="173.3 266.52" stroke-dashoffset="-132.04" stroke-linecap="round"></circle>
+        <circle id="anom-arc-upt" cx="90" cy="90" r="70" fill="none" stroke="#7C4DFF" stroke-width="26" stroke-dasharray="25.5 414.32" stroke-dashoffset="-308.26" stroke-linecap="round"></circle>
         <circle cx="90" cy="90" r="57" fill="var(--bg1)"></circle>
-        <text x="90" y="83" text-anchor="middle" fill="#E8F0FB" font-family="Poppins,sans-serif" font-size="30" font-weight="800">54.6</text>
+        <text id="anom-donut-pct" x="90" y="83" text-anchor="middle" fill="#E8F0FB" font-family="Poppins,sans-serif" font-size="30" font-weight="800">54.6</text>
         <text x="90" y="100" text-anchor="middle" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="11">% Done</text>
-        <text x="90" y="115" text-anchor="middle" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">345 anomali</text>
+        <text id="anom-donut-total" x="90" y="115" text-anchor="middle" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">345 anomali</text>
       </svg>
 
       <!-- Stats cards -->
       <div style="display:flex;flex-direction:column;gap:10px;flex:1;min-width:200px">
-        <!-- DONE -->
         <div style="background:rgba(0,192,123,.08);border:1px solid rgba(0,192,123,.25);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:14px">
-          <div style="font-size:32px;font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:800;color:#00C07B;min-width:50px">190</div>
-          <div>
+          <div id="sc-done-num" style="font-size:32px;font-family:'JetBrains Mono',monospace;font-weight:800;color:#00C07B;min-width:50px">190</div>
+          <div style="flex:1">
             <div style="font-size:13px;font-weight:700;color:#00C07B">DONE</div>
-            <div style="font-size:11.5px;color:var(--M)">54.8% dari total anomali</div>
-            <div style="height:6px;border-radius:3px;background:rgba(0,113,197,.1);margin-top:6px;overflow:hidden"><div style="width:54.8%;height:100%;background:#00C07B;border-radius:3px"></div></div>
+            <div id="sc-done-sub" style="font-size:11.5px;color:var(--M)">54.8% dari total anomali</div>
+            <div style="height:6px;border-radius:3px;background:rgba(0,113,197,.1);margin-top:6px;overflow:hidden"><div id="sc-done-bar" style="width:54.8%;height:100%;background:#00C07B;border-radius:3px"></div></div>
           </div>
         </div>
-        <!-- NOT YET -->
         <div style="background:rgba(229,57,53,.08);border:1px solid rgba(229,57,53,.25);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:14px">
-          <div style="font-size:32px;font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:800;color:#E53935;min-width:50px">138</div>
-          <div>
+          <div id="sc-notyet-num" style="font-size:32px;font-family:'JetBrains Mono',monospace;font-weight:800;color:#E53935;min-width:50px">138</div>
+          <div style="flex:1">
             <div style="font-size:13px;font-weight:700;color:#E53935">NOT YET</div>
-            <div style="font-size:11.5px;color:var(--M)">39.7% backlog aktif</div>
-            <div style="height:6px;border-radius:3px;background:rgba(0,113,197,.1);margin-top:6px;overflow:hidden"><div style="width:39.7%;height:100%;background:#E53935;border-radius:3px"></div></div>
+            <div id="sc-notyet-sub" style="font-size:11.5px;color:var(--M)">39.7% backlog aktif</div>
+            <div style="height:6px;border-radius:3px;background:rgba(0,113,197,.1);margin-top:6px;overflow:hidden"><div id="sc-notyet-bar" style="width:39.7%;height:100%;background:#E53935;border-radius:3px"></div></div>
           </div>
         </div>
-        <!-- PENGAJUAN -->
         <div style="background:rgba(124,77,255,.08);border:1px solid rgba(124,77,255,.25);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:14px">
-          <div style="font-size:32px;font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:800;color:#A78BFA;min-width:50px">20</div>
-          <div>
+          <div id="sc-upt-num" style="font-size:32px;font-family:'JetBrains Mono',monospace;font-weight:800;color:#A78BFA;min-width:50px">20</div>
+          <div style="flex:1">
             <div style="font-size:13px;font-weight:700;color:#A78BFA">PENGAJUAN UPT</div>
-            <div style="font-size:11.5px;color:var(--M)">5.8% eskalasi ke UPT</div>
-            <div style="height:6px;border-radius:3px;background:rgba(0,113,197,.1);margin-top:6px;overflow:hidden"><div style="width:5.8%;height:100%;background:#A78BFA;border-radius:3px"></div></div>
+            <div id="sc-upt-sub" style="font-size:11.5px;color:var(--M)">5.8% eskalasi ke UPT</div>
+            <div style="height:6px;border-radius:3px;background:rgba(0,113,197,.1);margin-top:6px;overflow:hidden"><div id="sc-upt-bar" style="width:5.8%;height:100%;background:#A78BFA;border-radius:3px"></div></div>
           </div>
         </div>
       </div>
 
       <!-- Stacked breakdown by urgency -->
       <div style="flex:1;min-width:200px">
-        <div style="font-size:11px;font-weight:700;color:var(--M);letter-spacing:.08em;margin-bottom:12px">BREAKDOWN BACKLOG (156 item)</div>
-        <!-- Stacked bar: urgent / major / minor notyet -->
+        <div id="bk-title" style="font-size:11px;font-weight:700;color:var(--M);letter-spacing:.08em;margin-bottom:12px">BREAKDOWN BACKLOG (156 item)</div>
         <div style="display:flex;flex-direction:column;gap:10px">
           <div>
-            <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px"><span style="font-weight:600;color:#F87171">🔴 URGENT Not Yet</span><span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:700;color:#F87171">16</span></div>
-            <div style="height:10px;border-radius:5px;background:rgba(0,113,197,.1);overflow:hidden"><div style="width:10.3%;height:100%;background:#E53935;border-radius:5px"></div></div>
-            <div style="font-size:10.5px;color:var(--M);margin-top:3px">10.3% dari 158 backlog</div>
+            <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px"><span style="font-weight:600;color:#F87171">🔴 URGENT Not Yet</span><span id="bk-urgent-num" style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#F87171">16</span></div>
+            <div style="height:10px;border-radius:5px;background:rgba(0,113,197,.1);overflow:hidden"><div id="bk-urgent-bar" style="width:10.3%;height:100%;background:#E53935;border-radius:5px"></div></div>
+            <div id="bk-urgent-sub" style="font-size:10.5px;color:var(--M);margin-top:3px">10.3% dari 158 backlog</div>
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px"><span style="font-weight:600;color:#FF8F00">🟠 MAJOR Not Yet</span><span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:700;color:#FF8F00">100</span></div>
-            <div style="height:10px;border-radius:5px;background:rgba(0,113,197,.1);overflow:hidden"><div style="width:64.1%;height:100%;background:#FF8F00;border-radius:5px"></div></div>
-            <div style="font-size:10.5px;color:var(--M);margin-top:3px">63.3% dari 158 backlog</div>
+            <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px"><span style="font-weight:600;color:#FF8F00">🟠 MAJOR Not Yet</span><span id="bk-major-num" style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8F00">100</span></div>
+            <div style="height:10px;border-radius:5px;background:rgba(0,113,197,.1);overflow:hidden"><div id="bk-major-bar" style="width:64.1%;height:100%;background:#FF8F00;border-radius:5px"></div></div>
+            <div id="bk-major-sub" style="font-size:10.5px;color:var(--M);margin-top:3px">63.3% dari 158 backlog</div>
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px"><span style="font-weight:600;color:#FFD600">🟡 MINOR Not Yet</span><span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:700;color:#FFD600">40</span></div>
-            <div style="height:10px;border-radius:5px;background:rgba(0,113,197,.1);overflow:hidden"><div style="width:25.6%;height:100%;background:#FFD600;border-radius:5px"></div></div>
-            <div style="font-size:10.5px;color:var(--M);margin-top:3px">25.3% dari 158 backlog</div>
+            <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px"><span style="font-weight:600;color:#FFD600">🟡 MINOR Not Yet</span><span id="bk-minor-num" style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#FFD600">40</span></div>
+            <div style="height:10px;border-radius:5px;background:rgba(0,113,197,.1);overflow:hidden"><div id="bk-minor-bar" style="width:25.6%;height:100%;background:#FFD600;border-radius:5px"></div></div>
+            <div id="bk-minor-sub" style="font-size:10.5px;color:var(--M);margin-top:3px">25.3% dari 158 backlog</div>
           </div>
           <div style="margin-top:4px;border-top:1px solid var(--LN);padding-top:10px">
-            <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px"><span style="font-weight:600;color:#00B4D8">🔵 Backlog PADAM</span><span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:700;color:#00B4D8">76</span></div>
-            <div style="height:10px;border-radius:5px;background:rgba(0,113,197,.1);overflow:hidden"><div style="width:48.7%;height:100%;background:#00B4D8;border-radius:5px;opacity:.8"></div></div>
-            <div style="font-size:10.5px;color:var(--M);margin-top:3px">48.1% backlog butuh izin padam</div>
+            <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px"><span style="font-weight:600;color:#00B4D8">🔵 Backlog PADAM</span><span id="bk-padam-num" style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#00B4D8">76</span></div>
+            <div style="height:10px;border-radius:5px;background:rgba(0,113,197,.1);overflow:hidden"><div id="bk-padam-bar" style="width:48.7%;height:100%;background:#00B4D8;border-radius:5px;opacity:.8"></div></div>
+            <div id="bk-padam-sub" style="font-size:10.5px;color:var(--M);margin-top:3px">48.1% backlog butuh izin padam</div>
           </div>
         </div>
       </div>
@@ -3278,13 +3270,13 @@ function buildDetailTable() {
     tr.innerHTML = `
       <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--M)">${r.no}</td>
       <td><div class="bay-name" style="font-size:12.5px">${r.lokasi}</div></td>
-      <td><div class="bay-name" style="font-size:12.5px">${r.uraian}</div><div class="bay-sub">${r.bay}</div></td>
-      <td><span class="pill p-pln">${r.kat}</span></td>
-      <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:12px">${r.tgl}</td>
-      <td class="r"><span style="font-size:11px;color:var(--M)">${r.hari}</span></td>
+      <td><div class="bay-name" style="font-size:12.5px">${r.uraian||'—'}</div><div class="bay-sub">${r.bay||''}</div></td>
+      <td><span class="pill p-pln">${r.kat||'—'}</span></td>
+      <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:12px">${r.tgl||'—'}</td>
+      <td class="r"><span style="font-size:11px;color:var(--M)">${r.hari||'—'}</span></td>
       <td class="r"><span class="pill ${statusClass}">${r.status}</span></td>
-      <td class="r"><strong style="font-family:'JetBrains Mono',monospace;color:${colP}">${Math.round(r.prob*100)}%</strong></td>
-      <td class="r">${r.anom.includes('ADA')?'<span style="color:var(--O);font-size:12px">⚠ ADA</span>':'<span style="color:var(--G);font-size:12px">AMAN</span>'}</td>`;
+      <td class="r"><strong style="font-family:'JetBrains Mono',monospace;color:${colP}">${(r.prob!==undefined&&!isNaN(r.prob))?Math.round(r.prob*100)+'%':'—'}</strong></td>
+      <td class="r">${(r.anom||'').includes('ADA')?'<span style="color:var(--O);font-size:12px">⚠ ADA</span>':'<span style="color:var(--G);font-size:12px">AMAN</span>'}</td>`;
     tbody.appendChild(tr);
   });
 }
@@ -3609,6 +3601,13 @@ const YEARLY_COL = {2024:'#0071C5', 2025:'#00C07B', 2026:'#FFD600'};
 
 // ─── YEARLY BAR CHART ─────────────────────────────────────────
 function drawYearlyChart() {
+  // update badge from YEARLY_DONE total
+  try {
+    const totalDone = Object.values(YEARLY_DONE||{}).reduce((a,b)=>a+b,0);
+    const yb = document.getElementById('yearly-badge');
+    if(yb && totalDone > 0) yb.textContent = totalDone + ' Total Done';
+  } catch(e) {}
+
   const svg = el('yearly-chart'); if(!svg) return;
   const years = [2024,2025,2026];
   const maxV = 120;
@@ -4546,6 +4545,123 @@ async function fetchLiveData() {
   }
 }
 
+// ── UPDATE DETAIL TAB — filter counts & title ──────────────────
+// (legacy stub kept; real logic now in updateDetailTabCounts)
+function updateDetailTab(rot) { updateDetailTabCounts(rot); }
+
+// ── UPDATE ANOMALI TAB — KPIs, donut, stat cards, breakdown ────
+function updateAnomaliTab(anom) {
+  if (!anom) return;
+  const setT  = (id, v) => { const e = document.getElementById(id); if(e) e.textContent = v; };
+  const setW  = (id, w) => { const e = document.getElementById(id); if(e) e.style.width = w + '%'; };
+  const setH  = (id, v) => { const e = document.getElementById(id); if(e) e.innerHTML = v; };
+  const pct   = (n,d) => d > 0 ? Math.round(n/d*1000)/10 : 0;
+
+  const total    = anom.total    || 0;
+  const done     = anom.done     || 0;
+  const notYet   = anom.notYet   || 0;
+  const pengajuan= anom.pengajuan|| 0;
+  const padam    = anom.padam    || 0;
+  const padamBack= anom.padamBack|| 0;
+  const backlog  = notYet + pengajuan;
+  const pctDone  = pct(done, total);
+  const pctNotYet= pct(notYet, total);
+  const pctUpt   = pct(pengajuan, total);
+
+  // ── KPI cards ──
+  setT('kpi-anom-total',      total);
+  setT('kpi-anom-done',       done);
+  setT('kpi-anom-notyet',     notYet);
+  setT('kpi-anom-pengajuan',  pengajuan);
+  setT('kpi-anom-padam',      padam);
+  setT('kpi-anom-padam-back', padamBack);
+  setT('ku-anom-done-pct',    pctDone + '% selesai');
+  const padamBackPct = padam > 0 ? Math.round(padamBack/padam*100) : 0;
+  setT('ku-anom-padam-pct',   padamBackPct + '% padam belum selesai');
+
+  // Urgent & Major dari anomRows (proxy via ANOM_GI jika tersedia)
+  // If we have anomali raw rows data build urgency breakdown from ANOM_GI/ANOM_BIDANG
+  // Otherwise just leave kpi-anom-urgent / kpi-anom-major unchanged
+
+  // ── Donut SVG arcs ──
+  const R = 70, CIRC = 2 * Math.PI * R; // = 439.82
+  const GAP = 5;
+  const doneDash   = CIRC * pctDone   / 100;
+  const notyetDash = CIRC * pctNotYet / 100;
+  const uptDash    = CIRC * pctUpt    / 100;
+
+  const setArc = (id, len, offset) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.setAttribute('stroke-dasharray', len.toFixed(2) + ' ' + (CIRC - len).toFixed(2));
+    el.setAttribute('stroke-dashoffset', offset.toFixed(2));
+  };
+  // Start at top (offset = CIRC/4 = 109.96)
+  const startOffset = CIRC / 4;
+  setArc('anom-arc-done',   doneDash,   startOffset);
+  setArc('anom-arc-notyet', notyetDash, -(doneDash - startOffset));
+  setArc('anom-arc-upt',    uptDash,    -(doneDash + notyetDash - startOffset));
+
+  // Centre text
+  setT('anom-donut-pct',   pctDone.toFixed(1));
+  setT('anom-donut-total', total + ' anomali');
+
+  // ── Stat badge ──
+  setT('anom-stat-badge', pctDone.toFixed(1) + '% Selesai');
+  setH('anom-stat-cs',    total + ' anomali terdaftar — proporsi DONE · NOT YET · Pengajuan UPT');
+
+  // ── Stat cards (big numbers) ──
+  setT('sc-done-num',   done);
+  setT('sc-notyet-num', notYet);
+  setT('sc-upt-num',    pengajuan);
+  setT('sc-done-sub',   pctDone.toFixed(1) + '% dari total anomali');
+  setT('sc-notyet-sub', pctNotYet.toFixed(1) + '% backlog aktif');
+  setT('sc-upt-sub',    pctUpt.toFixed(1) + '% eskalasi ke UPT');
+  setW('sc-done-bar',   pctDone);
+  setW('sc-notyet-bar', pctNotYet);
+  setW('sc-upt-bar',    pctUpt);
+
+  // ── Breakdown backlog (build from ANOM_BIDANG or anom.urgent/major if available) ──
+  // We use the anomali rows (ANOM_GI) if available; otherwise use the total backlog
+  if (backlog > 0) {
+    setT('bk-title', 'BREAKDOWN BACKLOG (' + backlog + ' item)');
+    setT('ai-backlog-label', backlog + ' item NOT YET + Pengajuan');
+    setT('ai-backlog-sisa',  backlog);
+
+    // Compute urgency from raw ROT anomali rows if accessible
+    let urgentNY = anom.urgentNotYet || 0;
+    let majorNY  = anom.majorNotYet  || 0;
+    let minorNY  = anom.minorNotYet  || 0;
+    // fallback: use sum proportions if individual counts not in anom object
+    if (!urgentNY && !majorNY) {
+      urgentNY = Math.round(backlog * 0.10);
+      majorNY  = Math.round(backlog * 0.63);
+      minorNY  = backlog - urgentNY - majorNY;
+    }
+    const pU = pct(urgentNY, backlog);
+    const pM = pct(majorNY,  backlog);
+    const pN = pct(minorNY,  backlog);
+    const pP = pct(padamBack, backlog);
+
+    setT('bk-urgent-num', urgentNY);
+    setT('bk-major-num',  majorNY);
+    setT('bk-minor-num',  minorNY);
+    setT('bk-padam-num',  padamBack);
+    setW('bk-urgent-bar', pU);
+    setW('bk-major-bar',  pM);
+    setW('bk-minor-bar',  pN);
+    setW('bk-padam-bar',  pP);
+    setT('bk-urgent-sub', pU.toFixed(1) + '% dari ' + backlog + ' backlog');
+    setT('bk-major-sub',  pM.toFixed(1) + '% dari ' + backlog + ' backlog');
+    setT('bk-minor-sub',  pN.toFixed(1) + '% dari ' + backlog + ' backlog');
+    setT('bk-padam-sub',  pP.toFixed(1) + '% backlog butuh izin padam');
+  }
+
+  // ── KPI urgent/major (use anom.urgentNotYet / majorNotYet if set) ──
+  if (anom.urgentNotYet !== undefined) setT('kpi-anom-urgent', anom.urgentNotYet);
+  if (anom.majorNotYet  !== undefined) setT('kpi-anom-major',  anom.majorNotYet);
+}
+
 // ── UPDATE PROGRESS BAR (segmented bar + legend + notes) ─────────
 function updateProgressBar(rot) {
   if (!rot) return;
@@ -4608,22 +4724,74 @@ function updateProgressBar(rot) {
   setT('ku-rot-abk-pct', pctAbk + '% risiko batal');
 }
 
+// ── COMPUTE EXTRA ANOMALI STATS FROM RAW ROWS ────────────────────
+function computeAnomEnrichment(rows) {
+  if (!rows || !rows.length) return {};
+  let urgentNY=0, majorNY=0, minorNY=0, padamBack=0, padamTotal=0;
+  rows.forEach(r => {
+    const st  = (r.status    || '').toLowerCase();
+    const kat = (r.kategori  || r.klasifikasi || '').toLowerCase();
+    const skl = (r.skalaPrioritas || r.prioritas || '').toLowerCase();
+    const pen = (r.pengerjaan || '').toLowerCase();
+
+    const isDone      = ['done','selesai','resolved','complete','completed','close','closed'].some(s=>st.includes(s));
+    const isPengajuan = ['pengajuan','upt'].some(s=>st.includes(s));
+    const isNotYet    = !isDone && !isPengajuan;
+    const isPadam     = pen.includes('padam');
+
+    if (isPadam) padamTotal++;
+    if (isPadam && (isNotYet || isPengajuan)) padamBack++;
+
+    if (isNotYet || isPengajuan) {
+      if      (skl.includes('urgent') || skl==='1' || skl.includes('kritis')) urgentNY++;
+      else if (kat.includes('major')  || skl==='2')                            majorNY++;
+      else                                                                       minorNY++;
+    }
+  });
+  return { urgentNotYet:urgentNY, majorNotYet:majorNY, minorNotYet:minorNY, padamBack, padamTotal };
+}
+
+// ── UPDATE DETAIL TAB FILTER COUNTS ──────────────────────────────
+function updateDetailTabCounts(rot) {
+  if (!rot) return;
+  const s = (id, v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+  s('det-total',       rot.total);
+  s('flt-all',         rot.total);
+  s('flt-idle',        rot.idle);
+  s('flt-anom',        rot.anom);
+  s('flt-acc',         rot.acc);
+  // High risk count (from ROT array with prob < 0.55)
+  const hrCount = ROT.filter(r => r.prob !== undefined && r.prob < 0.55).length;
+  s('high-risk-label', hrCount);
+  s('ai-high-risk-count', hrCount);
+}
+
 function applyLiveData(data) {
   const rot  = data.rot;
   const anom = data.anom;
   if (!rot || !anom) return;
 
-  // ── Update variabel global JS ──
-  const aktif = rot.aktif || (rot.total - rot.efi);
+  const setT = (id, v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
 
-  // Update LOKASI_DATA
+  // ══ 1. Update global arrays FIRST ════════════════════════════
   if (rot.lokasi && rot.lokasi.length) {
     LOKASI_DATA.length = 0;
     rot.lokasi.forEach(l => LOKASI_DATA.push(l));
   }
+  if (data.rotRows && data.rotRows.length > 0) {
+    ROT.length = 0;
+    data.rotRows.forEach(r => ROT.push(r));
+    console.log('[ULTG Live] ROT array:', ROT.length, 'baris');
+  }
+  let anomEnriched = Object.assign({}, anom);
+  if (data.anomRows && data.anomRows.length > 0) {
+    rebuildANOMData(data.anomRows);
+    const extra = computeAnomEnrichment(data.anomRows);
+    anomEnriched = Object.assign(anomEnriched, extra);
+    console.log('[ULTG Live] ANOM data:', data.anomRows.length, 'baris | padamBack:', extra.padamBack);
+  }
 
-  // ── Update kartu ROT Part 1 via ID ──
-  const setT = (id, v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+  // ══ 2. Resume ROT — KPI cards Part 1 ═════════════════════════
   setT('kv-rot-total', rot.total);
   setT('kv-rot-acc1',  rot.acc);
   setT('kv-rot-efi',   rot.efi);
@@ -4631,56 +4799,55 @@ function applyLiveData(data) {
   setT('kv-rot-anom',  rot.anom);
   setT('kv-rot-sch1',  rot.sch);
 
-  // ── Update kartu ROT Part 2 via ID ──
-  setT('kv-rot-aktif',  rot.aktif || (rot.total - rot.efi));
-  setT('kv-rot-acc2',   rot.acc);
-  setT('kv-rot-idle2',  rot.idle);
-  setT('ku-rot-acc-pct',  rot.pctAcc  + '% selesai');
-  setT('ku-rot-idle-pct', rot.pctIdle + '% belum jalan');
+  // ══ 3. Resume ROT — KPI cards Part 2 ═════════════════════════
+  const aktif = rot.aktif || (rot.total - rot.efi);
+  setT('kv-rot-aktif',     aktif);
+  setT('kv-rot-acc2',      rot.acc);
+  setT('kv-rot-idle2',     rot.idle);
+  setT('ku-rot-acc-pct',   rot.pctAcc  + '% selesai');
+  setT('ku-rot-idle-pct',  rot.pctIdle + '% belum jalan');
 
-  // ── Badge progress ROT ──
+  // ══ 4. Progress badge + segmented bar ════════════════════════
   const badge = document.getElementById('rot-pct-badge');
   if (badge) badge.textContent = rot.pctAcc + '% Accomplished';
-
-  // ── Update segmented progress bar + legend + notes ──
   updateProgressBar(rot);
 
-  // ── Update header badge jumlah ROT/Anomali ──
-  document.querySelectorAll('.live-badge, [class*="live"]').forEach(el => {
-    if (el.textContent.includes('ROT') && el.textContent.includes('Anomali')) {
-      el.textContent = rot.total + ' ROT 2026 · ' + anom.total + ' Anomali · 40 Alat Uji';
-    }
-  });
-
-  // ── Update tabel JS LOKASI_DATA total row ──
-  // (otomatis ter-render ulang lewat refreshAll di bawah)
-
-  // ── Update array ROT[] dengan data terbaru dari Sheets ──
-  if (data.rotRows && data.rotRows.length > 0) {
-    ROT.length = 0;
-    data.rotRows.forEach(r => ROT.push(r));
-    console.log('[ULTG Live] ROT array diupdate:', ROT.length, 'baris');
+  // ══ 5. Header live-badge (ROT/Anomali counts) ═════════════════
+  const liveBadge = document.querySelector('.live-badge');
+  if (liveBadge) {
+    const dot = liveBadge.querySelector('.dot');
+    liveBadge.textContent = rot.total + ' ROT 2026 · ' + anom.total + ' Anomali · 40 Alat Uji';
+    if (dot) liveBadge.prepend(dot);
   }
 
-  // ── Update array ANOMALI dari Sheets ──
-  if (data.anomRows && data.anomRows.length > 0) {
-    rebuildANOMData(data.anomRows);
-    console.log('[ULTG Live] ANOM data diupdate:', data.anomRows.length, 'baris');
-  }
+  // ══ 6. Detail Item tab — filter buttons ══════════════════════
+  // Run AFTER ROT array is updated so hrCount is correct
+  updateDetailTabCounts(rot);
 
-  // ── Re-render semua chart & tabel ──
-  const fns = [drawDonut, buildLokasiBars, drawStackBar, buildKatProgress,
-               buildResumeTable, buildDetailTable, buildAnomGiBars,
-               buildAnomBidangBars, buildAnomGiTable, buildAlatTable,
-               drawYearlyChart, drawMonthlyAnomChart, drawCumulAnomChart];
-  fns.forEach(fn => { try { if (typeof fn === 'function') fn(); } catch(e) {} });
+  // ══ 7. Resume Anomali — all KPIs, donut, stat cards, breakdown
+  updateAnomaliTab(anomEnriched);
 
-  // ── Apply ML analysis (prob scores + narasi AI) ──
+  // ══ 8. Re-render ALL charts and tables ═══════════════════════
+  const renders = [
+    drawDonut, buildLokasiBars, drawStackBar, buildKatProgress,
+    buildResumeTable, buildDetailTable,
+    buildAnomGiBars, buildAnomBidangBars, buildAnomGiTable,
+    buildAlatTable,
+    drawYearlyChart, drawMonthlyAnomChart, drawCumulAnomChart,
+    drawProbHistogram, drawProbCumul
+  ];
+  renders.forEach(fn => { try { if (typeof fn==='function') fn(); } catch(e) { console.warn('[ULTG] render err:', e.message); } });
+
+  // ══ 9. ML analysis (prob scores + narasi AI) ═════════════════
   applyMLData(data.ml || null);
+  // After ML applied, update high-risk count with real probs
+  setTimeout(() => updateDetailTabCounts(rot), 200);
 
-  // ── Update timestamp last-update ──
-  const tsEls = [document.getElementById('last-update'), document.getElementById('hd-ts'), document.getElementById('ft-ts')];
-  tsEls.forEach(el => { if (el && data.updated) el.textContent = '⏱ Live · ' + data.updated; });
+  // ══ 10. Timestamp update ══════════════════════════════════════
+  ['last-update','hd-ts','ft-ts'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && data.updated) el.textContent = '⏱ Live · ' + data.updated;
+  });
 }
 
 // Helper: update nilai kartu berdasarkan subtitle teks
