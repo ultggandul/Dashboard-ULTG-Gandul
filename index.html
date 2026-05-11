@@ -3800,13 +3800,20 @@ function buildFullAnomTable(rows) {
       ? '<span class="pill p-abk" style="font-size:10px">⚡ PADAM</span>'
       : '<span class="pill p-efi" style="font-size:10px">TDP</span>';
     // APPSHEET FILE BUTTON: baca field file dari data baris
-    // Support berbagai nama kolom dari AppSheet / Google Sheets
-    const fileAnom   = r.fileAnomali   || r.file_anomali   || r.FileAnomali   || r.FILE_ANOMALI
-                     || r.file         || r.File            || r.FILE
-                     || r.linkFile     || r.link_file       || r.url || '';
-    const fileBerita = r.fileBerita    || r.file_berita     || r.FileBerita    || r.FILE_BERITA
-                     || r.berita       || r.Berita          || r.BERITA
-                     || r.beritaAcara  || r.berita_acara    || r.linkBerita    || r.link_berita || '';
+    // Kolom L = "Upload Dokumen.pdf" (index 11 di spreadsheet AppSheet)
+    // Kolom Q = "Berita acara"       (index 16 di spreadsheet AppSheet)
+    // Apps Script mengirim field sesuai nama header — support semua variasi nama
+    const fileAnom = r['Upload Dokumen.pdf'] || r['Upload Dokumen']  || r['upload dokumen']
+                   || r['upload dokumen.pdf'] || r['UploadDokumen']   || r['uploadDokumen']
+                   || r['file_anomali']       || r['fileAnomali']     || r['FileAnomali']
+                   || r['FILE_ANOMALI']       || r['file']            || r['File']
+                   || r['linkFile']           || r['link_file']       || r['url'] || '';
+
+    const fileBerita = r['Berita acara']    || r['Berita Acara']   || r['BERITA ACARA']
+                     || r['berita_acara']   || r['beritaAcara']    || r['BeritaAcara']
+                     || r['berita']         || r['Berita']         || r['BERITA']
+                     || r['file_berita']    || r['fileBerita']     || r['FileBerita']
+                     || r['FILE_BERITA']    || r['linkBerita']     || r['link_berita'] || '';
     const btnAnom   = makeFileBtn(fileAnom,   '📄', 'File Anomali',   'file-btn-anom');
     const btnBerita = makeFileBtn(fileBerita, '✅', 'Berita Selesai', 'file-btn-berita');
     const tr = document.createElement('tr');
@@ -5053,6 +5060,25 @@ function applyMLData(ml) {
 // ─── LIVE DATA FROM GOOGLE SHEETS ────────────────────────────
 // Fetch otomatis saat halaman dibuka — data selalu terbaru dari Sheets
 
+// ══ INSTRUKSI APPS SCRIPT (doGet) ══════════════════════════════
+// Pastikan Apps Script menyertakan kolom L dan Q di anomRows.
+// Tambahkan field ini di bagian push anomRows di doGet():
+//
+//   anomRows.push({
+//     lokasi:       row[A],   // Kolom A - Pelapor / GI
+//     namaAlat:     row[B],   // Kolom B - Nama Alat
+//     deskripsi:    row[C],   // Kolom C - Deskripsi
+//     bay:          row[D],   // dst...
+//     ...
+//     "Upload Dokumen.pdf": row[11], // ← Kolom L (index 11)
+//     "Berita acara":       row[16], // ← Kolom Q (index 16)
+//   });
+//
+// Atau jika Apps Script sudah pakai getValues() dengan header:
+//   const headers = sheet.getRange(1,1,1,sheet.getLastColumn()).getValues()[0];
+//   // Field otomatis ter-map sesuai nama header, termasuk "Upload Dokumen.pdf" & "Berita acara"
+// ═══════════════════════════════════════════════════════════════
+
 const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbxJ6mVHowI_7gBlhWZ3lCZ-9con1RgmWVeCspl9aFdJuYD31uTyXSqlNjf3xOXvAzHTAw/exec';
 
 // ── Helper: dismiss the toast overlay ──────────────────────
@@ -5399,10 +5425,33 @@ function applyLiveData(data) {
   if (data.anomRows && data.anomRows.length > 0) {
     // Store raw rows for full table + filters
     ANOM_ROWS.length = 0;
-    data.anomRows.forEach(r => ANOM_ROWS.push(r));
+    data.anomRows.forEach(r => {
+      // APPSHEET FILE BUTTON: normalisasi field file saat data masuk
+      // Jika Apps Script mengirim array (row mentah), petakan kolom L (11) dan Q (16)
+      if (Array.isArray(r)) {
+        // Row masuk sebagai array → konversi ke object dengan nama field
+        r = {
+          lokasi:      r[0]  || '', namaAlat:    r[1]  || '', deskripsi:   r[2]  || '',
+          bay:         r[3]  || '', bidang:      r[4]  || '', kategori:    r[5]  || '',
+          pengerjaan:  r[6]  || '', klasifikasi: r[7]  || '', status:      r[8]  || '',
+          tgl:         r[9]  || '', prioritas:   r[10] || '',
+          fileAnomali: r[11] || '',  // Kolom L = Upload Dokumen.pdf
+          _colM:       r[12] || '', _colN: r[13] || '', _colO: r[14] || '', _colP: r[15] || '',
+          fileBerita:  r[16] || '',  // Kolom Q = Berita acara
+        };
+      }
+      ANOM_ROWS.push(r);
+    });
     rebuildANOMData(data.anomRows);
     const extra = computeAnomEnrichment(data.anomRows);
     anomEnriched = Object.assign(anomEnriched, extra);
+    // Debug: cek apakah field file sudah masuk dari Apps Script
+    const sampleWithFile = ANOM_ROWS.find(r => r['Upload Dokumen.pdf'] || r['Berita acara'] || r.fileAnomali || r.fileBerita);
+    if (sampleWithFile) {
+      console.log('[ULTG File] ✅ Field file ditemukan:', Object.keys(sampleWithFile).filter(k => k.toLowerCase().includes('upload')||k.toLowerCase().includes('berita')||k==='fileAnomali'||k==='fileBerita'));
+    } else {
+      console.warn('[ULTG File] ⚠ Field file belum ada di anomRows. Pastikan Apps Script menyertakan kolom L ("Upload Dokumen.pdf") dan Q ("Berita acara"). Lihat instruksi di kode doGet().');
+    }
     console.log('[ULTG Live] ANOM data:', data.anomRows.length, 'baris | padamBack:', extra.padamBack);
   }
 
