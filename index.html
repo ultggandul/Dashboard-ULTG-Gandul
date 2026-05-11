@@ -3707,25 +3707,7 @@ function buildDetailTable() {
   const _bt=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   _bt('rot-filtered-count',items.length); _bt('rot-total-count',ROT.length);
 }
-// -- legacy forEach stub (not used; buildDetailTableFiltered handles rendering)
-function _detailLegacyStub() { const items=[]; items.forEach(r => {
-    const colP = r.prob>=0.85?'var(--G)':r.prob>=0.6?'var(--Y)':'var(--R)';
-    const statusClass = r.status==='Accomplished'?'p-acc':r.status==='EFISIENSI'?'p-efi':r.status==='IDLE'?'p-idl':r.status==='Scheduled'||r.status==='Re-Scheduled'?'p-sch':'p-abk';
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--M)">${r.no}</td>
-      <td><div class="bay-name" style="font-size:12.5px">${r.lokasi}</div></td>
-      <td><div class="bay-name" style="font-size:12.5px">${r.uraian||'—'}</div><div class="bay-sub">${r.bay||''}</div></td>
-      <td><span class="pill p-pln">${r.kat||'—'}</span></td>
-      <td class="r" style="font-family:'JetBrains Mono',monospace;font-size:12px">${r.tgl||'—'}</td>
-      <td class="r"><span style="font-size:11px;color:var(--M)">${r.hari||'—'}</span></td>
-      <td class="r"><span class="pill ${statusClass}">${r.status}</span></td>
-      <td class="r"><strong style="font-family:'JetBrains Mono',monospace;color:${colP}">${(r.prob!==undefined&&!isNaN(r.prob))?Math.round(r.prob*100)+'%':'—'}</strong></td>
-      <td class="r">${(r.anom||'').includes('ADA')?'<span style="color:var(--O);font-size:12px">⚠ ADA</span>':'<span style="color:var(--G);font-size:12px">AMAN</span>'}</td>`;
-    tbody.appendChild(tr);
-  });
-}
-}
+
 
 // ─── ANOMALI GI BARS ──────────────────────────────────────────
 function buildAnomGiBars() {
