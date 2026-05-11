@@ -358,35 +358,35 @@ footer{
     <!-- Donut distribusi 36 item aktif -->
     <div class="card gf">
       <div class="ch">
-        <div><div class="ct">Distribusi 36 Item Aktif ROT 2026</div><div class="cs">Proporsi pencapaian dari target aktual (minus Efisiensi)</div></div>
-        <div class="ck cg">47.2% Accomplished</div>
+        <div><div class="ct" id="don-title">Distribusi 36 Item Aktif ROT 2026</div><div class="cs" id="don-cs">Proporsi pencapaian dari target aktual (minus Efisiensi)</div></div>
+        <div class="ck cg" id="don-badge">47.2% Accomplished</div>
       </div>
       <div style="display:flex;align-items:center;gap:28px;flex-wrap:wrap">
         <svg id="donut-resume" viewBox="0 0 150 150" style="width:150px;flex-shrink:0"><circle cx="75" cy="75" r="58" fill="none" stroke="rgba(0,113,197,.1)" stroke-width="20"></circle><circle cx="75" cy="75" r="58" fill="none" stroke="#00C07B" stroke-width="20" stroke-dasharray="131.59782560037246 232.82692221604356" stroke-dashoffset="91.106186954104" stroke-linecap="round"></circle><circle cx="75" cy="75" r="58" fill="none" stroke="#E53935" stroke-width="20" stroke-dasharray="192.33528356977513 172.0894642466409" stroke-dashoffset="-40.491638646268456" stroke-linecap="round"></circle><circle cx="75" cy="75" r="58" fill="none" stroke="#A78BFA" stroke-width="20" stroke-dasharray="20.24581932313422 344.1789284932818" stroke-dashoffset="-232.82692221604358" stroke-linecap="round"></circle><circle cx="75" cy="75" r="58" fill="none" stroke="#FF8F00" stroke-width="20" stroke-dasharray="10.12290966156711 354.3018381548489" stroke-dashoffset="-253.0727415391778" stroke-linecap="round"></circle><circle cx="75" cy="75" r="58" fill="none" stroke="#F87171" stroke-width="20" stroke-dasharray="10.12290966156711 354.3018381548489" stroke-dashoffset="-263.1956512007449" stroke-linecap="round"></circle><circle cx="75" cy="75" r="46" fill="var(--bg1)"></circle><text x="75" y="68" text-anchor="middle" fill="#E8F0FB" font-family="Poppins,sans-serif" font-size="26" font-weight="700">47.2</text><text x="75" y="83" text-anchor="middle" fill="#7A94BB" font-family="Poppins,sans-serif" font-size="12" font-weight="700">%</text><text x="75" y="96" text-anchor="middle" fill="#7A94BB" font-family="Poppins,sans-serif" font-size="10" font-weight="700">Acc/36</text></svg>
         <div style="display:flex;flex-direction:column;gap:9px;flex:1;min-width:140px">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
             <div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:3px;background:#00C07B"></div><span style="font-size:13px">Accomplished</span></div>
-            <span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:700;color:#00C07B;font-size:14px">13</span>
+            <span id="don-acc" style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#00C07B;font-size:14px">13</span>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
             <div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:3px;background:#E53935"></div><span style="font-size:13px">IDLE</span></div>
-            <span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:700;color:#E53935;font-size:14px">19</span>
+            <span id="don-idle" style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#E53935;font-size:14px">19</span>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
             <div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:3px;background:#A78BFA"></div><span style="font-size:13px">Scheduled</span></div>
-            <span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:700;color:#A78BFA;font-size:14px">2</span>
+            <span id="don-sch" style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#A78BFA;font-size:14px">2</span>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
             <div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:3px;background:#FF8F00"></div><span style="font-size:13px">Re-Scheduled</span></div>
-            <span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:700;color:#FF8F00;font-size:14px">1</span>
+            <span id="don-res" style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#FF8F00;font-size:14px">1</span>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
             <div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:3px;background:#F87171"></div><span style="font-size:13px">ABK</span></div>
-            <span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:700;color:#F87171;font-size:14px">1</span>
+            <span id="don-abk" style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#F87171;font-size:14px">1</span>
           </div>
           <div style="margin-top:4px;border-top:1px dashed rgba(255,214,0,.3);padding-top:8px;display:flex;align-items:center;justify-content:space-between;gap:8px;opacity:.6">
             <div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:3px;background:#4DA6FF;opacity:.5"></div><span style="font-size:12px;color:var(--M)">Efisiensi (→2028)</span></div>
-            <span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-weight:700;color:#4DA6FF;font-size:13px;opacity:.6">33*</span>
+            <span id="don-efi" style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#4DA6FF;font-size:13px;opacity:.6">33*</span>
           </div>
         </div>
       </div>
@@ -396,7 +396,7 @@ footer{
     <div class="card gf">
       <div class="ch">
         <div><div class="ct">Accomplished per Lokasi</div><div class="cs">% Accomplished dari item aktif tiap GI/GITET (minus Efisiensi)</div></div>
-        <div class="ck ca">6 Lokasi</div>
+        <div class="ck ca" id="lokasi-badge">6 Lokasi</div>
       </div>
       <div id="lokasi-bars" class="hbl"><div class="hbi">
       <div class="hm">
@@ -515,14 +515,14 @@ footer{
     <div class="card">
       <div class="ch">
         <div><div class="ct">Distribusi Pekerjaan per Bulan</div><div class="cs">Akumulasi status ROT per bulan pelaksanaan 2026</div></div>
-        <div class="ck cy">9 Bulan Aktif</div>
+        <div class="ck cy" id="stack-badge">9 Bulan Aktif</div>
       </div>
       <svg id="stack-chart" viewBox="0 0 480 220" style="width:100%;overflow:visible"><line x1="30" y1="160" x2="470" y2="160" stroke="rgba(0,113,197,.1)" stroke-width="1" stroke-dasharray="3,3"></line><text x="26" y="164" text-anchor="end" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">0</text><line x1="30" y1="87.5" x2="470" y2="87.5" stroke="rgba(0,113,197,.1)" stroke-width="1" stroke-dasharray="3,3"></line><text x="26" y="91.5" text-anchor="end" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">5</text><line x1="30" y1="15" x2="470" y2="15" stroke="rgba(0,113,197,.1)" stroke-width="1" stroke-dasharray="3,3"></line><text x="26" y="19" text-anchor="end" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">10</text><rect x="30" y="102" width="44.888888888888886" height="58" fill="#00C07B" rx="3" opacity=".85"></rect><rect x="30" y="87.5" width="44.888888888888886" height="14.5" fill="#4DA6FF" rx="3" opacity=".85"></rect><text x="52.44444444444444" y="174" text-anchor="middle" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">Jan</text><text x="52.44444444444444" y="83.5" text-anchor="middle" fill="#E8F0FB" font-family="JetBrains Mono,monospace" font-size="9" font-weight="600">5</text><rect x="78.88888888888889" y="87.5" width="44.888888888888886" height="72.5" fill="#00C07B" rx="3" opacity=".85"></rect><rect x="78.88888888888889" y="73" width="44.888888888888886" height="14.5" fill="#4DA6FF" rx="3" opacity=".85"></rect><text x="101.33333333333333" y="174" text-anchor="middle" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">Feb</text><text x="101.33333333333333" y="69" text-anchor="middle" fill="#E8F0FB" font-family="JetBrains Mono,monospace" font-size="9" font-weight="600">6</text><rect x="127.77777777777777" y="145.5" width="44.888888888888886" height="14.5" fill="#00C07B" rx="3" opacity=".85"></rect><rect x="127.77777777777777" y="29.499999999999996" width="44.888888888888886" height="116" fill="#4DA6FF" rx="3" opacity=".85"></rect><text x="150.22222222222223" y="174" text-anchor="middle" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">Apr</text><text x="150.22222222222223" y="25.499999999999996" text-anchor="middle" fill="#E8F0FB" font-family="JetBrains Mono,monospace" font-size="9" font-weight="600">9</text><rect x="176.66666666666666" y="145.5" width="44.888888888888886" height="14.5" fill="#00C07B" rx="3" opacity=".85"></rect><rect x="176.66666666666666" y="131" width="44.888888888888886" height="14.5" fill="#4DA6FF" rx="3" opacity=".85"></rect><text x="199.1111111111111" y="174" text-anchor="middle" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">Mei</text><text x="199.1111111111111" y="127" text-anchor="middle" fill="#E8F0FB" font-family="JetBrains Mono,monospace" font-size="9" font-weight="600">2</text><rect x="225.55555555555554" y="116.5" width="44.888888888888886" height="43.5" fill="#00C07B" rx="3" opacity=".85"></rect><rect x="225.55555555555554" y="87.5" width="44.888888888888886" height="29" fill="#4DA6FF" rx="3" opacity=".85"></rect><rect x="225.55555555555554" y="43.99999999999999" width="44.888888888888886" height="43.50000000000001" fill="#FFD600" rx="3" opacity=".85"></rect><text x="248" y="174" text-anchor="middle" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">Jun</text><text x="248" y="39.99999999999999" text-anchor="middle" fill="#E8F0FB" font-family="JetBrains Mono,monospace" font-size="9" font-weight="600">8</text><rect x="274.44444444444446" y="131" width="44.888888888888886" height="29" fill="#00C07B" rx="3" opacity=".85"></rect><rect x="274.44444444444446" y="58.50000000000001" width="44.888888888888886" height="72.5" fill="#4DA6FF" rx="3" opacity=".85"></rect><rect x="274.44444444444446" y="29.499999999999996" width="44.888888888888886" height="29.00000000000001" fill="#FFD600" rx="3" opacity=".85"></rect><text x="296.8888888888889" y="174" text-anchor="middle" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">Jul</text><text x="296.8888888888889" y="25.499999999999996" text-anchor="middle" fill="#E8F0FB" font-family="JetBrains Mono,monospace" font-size="9" font-weight="600">9</text><rect x="323.3333333333333" y="145.5" width="44.888888888888886" height="14.5" fill="#00C07B" rx="3" opacity=".85"></rect><rect x="323.3333333333333" y="73" width="44.888888888888886" height="72.5" fill="#4DA6FF" rx="3" opacity=".85"></rect><rect x="323.3333333333333" y="15" width="44.888888888888886" height="58" fill="#FFD600" rx="3" opacity=".85"></rect><text x="345.77777777777777" y="174" text-anchor="middle" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">Agu</text><text x="345.77777777777777" y="11" text-anchor="middle" fill="#E8F0FB" font-family="JetBrains Mono,monospace" font-size="9" font-weight="600">10</text><rect x="372.2222222222222" y="29.499999999999996" width="44.888888888888886" height="130.5" fill="#4DA6FF" rx="3" opacity=".85"></rect><rect x="372.2222222222222" y="15" width="44.888888888888886" height="14.499999999999996" fill="#E53935" rx="3" opacity=".85"></rect><text x="394.66666666666663" y="174" text-anchor="middle" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">Sep</text><text x="394.66666666666663" y="11" text-anchor="middle" fill="#E8F0FB" font-family="JetBrains Mono,monospace" font-size="9" font-weight="600">10</text><rect x="421.1111111111111" y="145.5" width="44.888888888888886" height="14.5" fill="#4DA6FF" rx="3" opacity=".85"></rect><rect x="421.1111111111111" y="116.5" width="44.888888888888886" height="29" fill="#FFD600" rx="3" opacity=".85"></rect><text x="443.55555555555554" y="174" text-anchor="middle" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">Okt</text><text x="443.55555555555554" y="112.5" text-anchor="middle" fill="#E8F0FB" font-family="JetBrains Mono,monospace" font-size="9" font-weight="600">3</text><rect x="30" y="189" width="9" height="9" rx="2" fill="#00C07B"></rect><text x="43" y="197" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">Acc</text><rect x="100" y="189" width="9" height="9" rx="2" fill="#4DA6FF"></rect><text x="113" y="197" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">Efi</text><rect x="170" y="189" width="9" height="9" rx="2" fill="#FFD600"></rect><text x="183" y="197" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">IDLE</text><rect x="240" y="189" width="9" height="9" rx="2" fill="#E53935"></rect><text x="253" y="197" fill="#7A94BB" font-family="JetBrains Mono,monospace" font-size="9">Other</text></svg>
     </div>
     <div class="card">
       <div class="ch">
-        <div><div class="ct">Kategori Bay</div><div class="cs">Proporsi pekerjaan per jenis bay (dari 36 item aktif)</div></div>
-        <div class="ck ca">4 Kategori</div>
+        <div><div class="ct">Kategori Bay</div><div class="cs" id="kat-cs">Proporsi pekerjaan per jenis bay (dari 36 item aktif)</div></div>
+        <div class="ck ca" id="kat-badge">4 Kategori</div>
       </div>
       <div id="kat-progress"><div style="margin-bottom: 14px;">
       <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px">
@@ -3054,43 +3054,121 @@ function goTab(name, btn) {
   if (btn) btn.classList.add('on');
 }
 
+// ── REBUILD STACK_BY_MO + KAT_DATA FROM ROT ARRAY ────────────────
+function rebuildROTChartData() {
+  const MO = ['','Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  const moMap = {}, katMap = {};
+
+  ROT.forEach(r => {
+    const st  = (r.status || '').toLowerCase();
+    const isAcc = st.includes('accomplished');
+    const isEfi = st.includes('efisiensi');
+    const isIdl = st.includes('idle');
+    const isSch = st.includes('scheduled') && !st.includes('re-sched');
+    const isRes = st.includes('re-sched');
+    const isAbk = st.includes('abk');
+
+    // Monthly distribution (from tgl field e.g. "2026-06-15")
+    const mo = parseInt((r.tgl || '').split('-')[1]) || 0;
+    if (mo >= 1 && mo <= 12) {
+      if (!moMap[mo]) moMap[mo] = {mo:MO[mo], acc:0, efi:0, idle:0, other:0};
+      if (isAcc) moMap[mo].acc++;
+      else if (isEfi) moMap[mo].efi++;
+      else if (isIdl) moMap[mo].idle++;
+      else moMap[mo].other++;
+    }
+
+    // Category distribution
+    const kat = (r.kat || 'LAIN-LAIN').toUpperCase().trim() || 'LAIN-LAIN';
+    if (!katMap[kat]) katMap[kat] = {kat, total:0, acc:0, efi:0, idle:0, other:0};
+    katMap[kat].total++;
+    if (isAcc) katMap[kat].acc++;
+    else if (isEfi) katMap[kat].efi++;
+    else if (isIdl) katMap[kat].idle++;
+    else katMap[kat].other++;
+  });
+
+  // Rebuild STACK_BY_MO (sorted Jan-Des)
+  STACK_BY_MO.length = 0;
+  [1,2,3,4,5,6,7,8,9,10,11,12].forEach(m => { if (moMap[m]) STACK_BY_MO.push(moMap[m]); });
+
+  // Rebuild KAT_DATA (sorted by total desc)
+  KAT_DATA.length = 0;
+  Object.values(katMap).sort((a,b) => b.total - a.total).forEach(k => KAT_DATA.push(k));
+
+  // Update badges
+  const setBadge = (id, txt) => { const e=document.getElementById(id); if(e) e.textContent=txt; };
+  setBadge('stack-badge', STACK_BY_MO.length + ' Bulan Aktif');
+  setBadge('kat-badge',   KAT_DATA.length + ' Kategori');
+  const aktif = ROT.filter(r => !(r.status||'').toLowerCase().includes('efisiensi')).length;
+  setBadge('kat-cs', 'Proporsi pekerjaan per jenis bay (dari ' + aktif + ' item aktif)');
+}
+
 // ─── DONUT RESUME ────────────────────────────────────────────
 function drawDonut() {
   const svg = el('donut-resume'); if (!svg) return;
-  // Only active items (no Efisiensi): Acc=13, IDLE=19, Sch=2, Re-Sch=1, ABK=1 → total=36
+
+  // ── Compute totals live from LOKASI_DATA ──
+  let acc=0, idle=0, sch=0, res=0, abk=0, efi=0;
+  LOKASI_DATA.forEach(d => {
+    acc  += d.acc  || 0;  idle += d.idle || 0;  sch += d.sch || 0;
+    res  += d.res  || 0;  abk  += d.abk  || 0;  efi += d.efi || 0;
+  });
+  const aktif  = acc + idle + sch + res + abk;
+  const pctAcc = aktif > 0 ? +(acc / aktif * 100).toFixed(1) : 0;
+
+  // ── Update HTML legend numbers ──
+  const st = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+  st('don-acc', acc); st('don-idle', idle); st('don-sch', sch);
+  st('don-res', res); st('don-abk', abk);   st('don-efi', efi + '*');
+
+  // ── Update card title, badge, subtitle ──
+  st('don-title',  'Distribusi ' + aktif + ' Item Aktif ROT 2026');
+  st('don-badge',  pctAcc + '% Accomplished');
+  st('don-cs',     'Proporsi pencapaian dari target aktual (minus Efisiensi)');
+  st('lokasi-badge', LOKASI_DATA.length + ' Lokasi');
+
+  // ── Draw SVG ──
   const slices = [
-    {v:13, col:'#00C07B'}, {v:19, col:'#E53935'}, {v:2, col:'#A78BFA'},
-    {v:1,  col:'#FF8F00'}, {v:1,  col:'#F87171'}
+    {v:acc, col:'#00C07B'}, {v:idle, col:'#E53935'}, {v:sch, col:'#A78BFA'},
+    {v:res, col:'#FF8F00'}, {v:abk,  col:'#F87171'}
   ];
-  const total = 36, cx = 75, cy = 75, r = 58, sw = 20;
-  const circ = 2 * Math.PI * r;
-  let offset = -circ * 0.25;
+  const total = aktif || 1;
+  const cx=75, cy=75, r=58, sw=20;
+  const circ = 2*Math.PI*r;
+  let offset = -circ*0.25;
   svg.innerHTML = '';
-  // Background circle
+  // Background
   const bg = document.createElementNS('http://www.w3.org/2000/svg','circle');
-  bg.setAttribute('cx',cx);bg.setAttribute('cy',cy);bg.setAttribute('r',r);
-  bg.setAttribute('fill','none');bg.setAttribute('stroke','rgba(0,113,197,.1)');bg.setAttribute('stroke-width',sw);
-  svg.appendChild(bg);
+  bg.setAttribute('cx',cx); bg.setAttribute('cy',cy); bg.setAttribute('r',r);
+  bg.setAttribute('fill','none'); bg.setAttribute('stroke','rgba(0,113,197,.1)');
+  bg.setAttribute('stroke-width',sw); svg.appendChild(bg);
+  // Slices
   slices.forEach(s => {
-    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    const frac = s.v / total, dashLen = frac * circ, dashGap = circ - dashLen;
-    c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',r);
-    c.setAttribute('fill','none');c.setAttribute('stroke',s.col);c.setAttribute('stroke-width',sw);
+    if (!s.v) return;
+    const c    = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    const frac = s.v/total, dashLen = frac*circ, dashGap = circ-dashLen;
+    c.setAttribute('cx',cx); c.setAttribute('cy',cy); c.setAttribute('r',r);
+    c.setAttribute('fill','none'); c.setAttribute('stroke',s.col); c.setAttribute('stroke-width',sw);
     c.setAttribute('stroke-dasharray',`${dashLen} ${dashGap}`);
-    c.setAttribute('stroke-dashoffset',-offset);
+    c.setAttribute('stroke-dashoffset', -offset);
     c.setAttribute('stroke-linecap','round');
     svg.appendChild(c);
     offset += dashLen;
   });
-  const center = document.createElementNS('http://www.w3.org/2000/svg','circle');
-  center.setAttribute('cx',cx);center.setAttribute('cy',cy);center.setAttribute('r',r-sw/2-2);
-  center.setAttribute('fill','var(--bg1)');svg.appendChild(center);
-  ['38.9','%','Acc/36'].forEach((txt,i) => {
+  // Center fill
+  const cen = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  cen.setAttribute('cx',cx); cen.setAttribute('cy',cy); cen.setAttribute('r',r-sw/2-2);
+  cen.setAttribute('fill','var(--bg1)'); svg.appendChild(cen);
+  // Center text
+  [String(pctAcc), '%', 'Acc/'+aktif].forEach((txt,i) => {
     const t = document.createElementNS('http://www.w3.org/2000/svg','text');
-    t.setAttribute('x',cx);t.setAttribute('y',[68,83,96][i]);
-    t.setAttribute('text-anchor','middle');t.setAttribute('fill',['#E8F0FB','#7A94BB','#7A94BB'][i]);
-    t.setAttribute('font-family','Poppins,sans-serif');t.setAttribute('font-size',[26,12,10][i]);
-    t.setAttribute('font-weight','700');t.textContent = txt;
+    t.setAttribute('x',cx); t.setAttribute('y',[68,83,96][i]);
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('fill',['#E8F0FB','#7A94BB','#7A94BB'][i]);
+    t.setAttribute('font-family','Poppins,sans-serif');
+    t.setAttribute('font-size',[26,12,10][i]);
+    t.setAttribute('font-weight','700'); t.textContent = txt;
     svg.appendChild(t);
   });
 }
@@ -3219,7 +3297,15 @@ function buildKatProgress() {
 // ─── RESUME TABLE ─────────────────────────────────────────────
 function buildResumeTable() {
   const tbody = el('resume-tbody'); if(!tbody) return; tbody.innerHTML='';
-  const rows = [...LOKASI_DATA, {name:'TOTAL ULTG GANDUL',short:'TOTAL',total:69,acc:17,efi:33,idle:11,sch:7,res:0,abk:1,anom:30}];
+  // Compute TOTAL row dynamically from LOKASI_DATA
+  const tot = LOKASI_DATA.reduce((a,d)=>({
+    name:'TOTAL ULTG GANDUL', short:'TOTAL',
+    total: a.total+(d.total||0), acc:  a.acc +(d.acc ||0),
+    efi:   a.efi  +(d.efi  ||0), idle: a.idle+(d.idle||0),
+    sch:   a.sch  +(d.sch  ||0), res:  a.res +(d.res ||0),
+    abk:   a.abk  +(d.abk  ||0), anom: a.anom+(d.anom||0),
+  }), {name:'TOTAL ULTG GANDUL',short:'TOTAL',total:0,acc:0,efi:0,idle:0,sch:0,res:0,abk:0,anom:0});
+  const rows = [...LOKASI_DATA, tot];
   rows.forEach((d,i) => {
     const active = d.total - d.efi;
     const rate = active > 0 ? Math.round(d.acc / active * 100) : 0;
@@ -4782,6 +4868,8 @@ function applyLiveData(data) {
     ROT.length = 0;
     data.rotRows.forEach(r => ROT.push(r));
     console.log('[ULTG Live] ROT array:', ROT.length, 'baris');
+    // Rebuild STACK_BY_MO and KAT_DATA from live ROT rows
+    rebuildROTChartData();
   }
   let anomEnriched = Object.assign({}, anom);
   if (data.anomRows && data.anomRows.length > 0) {
